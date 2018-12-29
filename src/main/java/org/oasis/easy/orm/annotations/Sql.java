@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 public @interface Sql {
     String value() default "";
 
-    SqlType sortType() default SqlType.AUTO_DETECT;
+    SqlType type() default SqlType.AUTO_DETECT;
 }
