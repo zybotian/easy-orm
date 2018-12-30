@@ -3,7 +3,11 @@ package org.oasis.easy.orm.data.access;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
@@ -13,6 +17,10 @@ import java.util.List;
 public class DataAccessImpl implements DataAccess {
 
     private JdbcTemplate jdbcTemplate;
+
+    public DataAccessImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
     @Override
     public <T> List<T> select(String sql, Object[] args, RowMapper<T> rowMapper) {

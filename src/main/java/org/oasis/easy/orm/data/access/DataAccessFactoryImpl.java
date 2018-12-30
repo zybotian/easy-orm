@@ -1,7 +1,10 @@
 package org.oasis.easy.orm.data.access;
 
-import org.springframework.beans.factory.ListableBeanFactory;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.oasis.easy.orm.exception.EasyOrmException;
+import org.oasis.easy.orm.exception.ErrorCode;
+
+import javax.sql.DataSource;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author tianbo
@@ -9,14 +12,24 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  */
 public class DataAccessFactoryImpl implements DataAccessFactory {
 
-    private final ListableBeanFactory beanFactory;
+    private DataSourceFactory dataSourceFactory;
 
-    public DataAccessFactoryImpl(ConfigurableListableBeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
+    private ConcurrentHashMap<DataSource, DataAccess> dataAccessCache = new ConcurrentHashMap<>();
+
+    public DataAccessFactoryImpl(DataSourceFactory dataSourceFactory) {
+        this.dataSourceFactory = dataSourceFactory;
     }
 
     @Override
     public DataAccess getDataAccess() {
-        return null;
+        DataSource dataSource = dataSourceFactory.getDataSource();
+        if (dataSource == null) {
+            throw new EasyOrmException(ErrorCode.SERVICE_ERROR, "can not find a data source");
+        }
+        DataAccess dataAccess = dataAccessCache.get(dataSource);
+        if (dataAccess == null) {
+            dataAccessCache.put(dataSource, new DataAccessImpl(dataSource));
+        }
+        return dataAccess;
     }
 }

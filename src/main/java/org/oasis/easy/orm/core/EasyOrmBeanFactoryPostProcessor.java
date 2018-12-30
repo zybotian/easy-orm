@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.oasis.easy.orm.data.access.DataAccessFactory;
 import org.oasis.easy.orm.data.access.DataAccessFactoryImpl;
+import org.oasis.easy.orm.data.access.DataSourceFactoryImpl;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
 import org.oasis.easy.orm.interpreter.InterpreterFactory;
@@ -47,7 +48,7 @@ public class EasyOrmBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
     public DataAccessFactory getDataAccessFactory(ConfigurableListableBeanFactory beanFactory) {
         if (this.dataAccessFactory == null) {
-            dataAccessFactory = new DataAccessFactoryImpl(beanFactory);
+            dataAccessFactory = new DataAccessFactoryImpl(new DataSourceFactoryImpl(beanFactory));
         }
         return dataAccessFactory;
     }
@@ -74,7 +75,7 @@ public class EasyOrmBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         }
 
         for (BeanDefinition beanDefinition : candidates) {
-            registerDaoBeanDefination(beanDefinition, beanFactory);
+            registerDaoBeanDefinition(beanDefinition, beanFactory);
         }
     }
 
@@ -87,7 +88,7 @@ public class EasyOrmBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         return daoComponentProvider.findCandidateComponents(baseDir);
     }
 
-    private void registerDaoBeanDefination(BeanDefinition beanDefinition, ConfigurableListableBeanFactory beanFactory) {
+    private void registerDaoBeanDefinition(BeanDefinition beanDefinition, ConfigurableListableBeanFactory beanFactory) {
         MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
 
         String daoClassName = beanDefinition.getBeanClassName();

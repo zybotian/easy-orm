@@ -1,5 +1,6 @@
 package org.oasis.easy.orm.mapper.row;
 
+import org.oasis.easy.orm.statement.StatementMetadata;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
@@ -9,7 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 public class RowMapperFactoryImpl implements RowMapperFactory {
 
     @Override
-    public RowMapper<?> getRowMapper() {
+    public RowMapper<?> getRowMapper(StatementMetadata metadata) {
         return null;
     }
 }

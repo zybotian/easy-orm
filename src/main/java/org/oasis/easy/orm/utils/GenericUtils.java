@@ -13,6 +13,12 @@ import java.util.*;
 public class GenericUtils {
     private static final Class[] EMPTY_CLASSES = new Class[0];
 
+    /**
+     * 返回泛型的容器类型
+     * @param invocationClass
+     * @param targetType
+     * @return
+     */
     public static Class[] resolveTypeParameters(Class invocationClass, Type targetType) {
         if (targetType instanceof ParameterizedType) {
             // 带泛型的类型
@@ -27,6 +33,12 @@ public class GenericUtils {
         return EMPTY_CLASSES;
     }
 
+    /**
+     * 返回泛型的类型
+     * @param invocationClass
+     * @param targetType
+     * @return
+     */
     public static Class resolveTypeVariable(Class invocationClass, Type targetType) {
         if (targetType == null) {
             throw new EasyOrmException(ErrorCode.MISSING_CONFIG, "type variable is null");
@@ -74,19 +86,18 @@ public class GenericUtils {
         }
 
         Type returnType = targetType;
-        while (true) {
-            Type old = returnType;
-            returnType = genericAndActualMap.get(returnType);
-            if (returnType instanceof Class) {
-                return (Class) returnType;
-            }
-            if (returnType == null) {
-                returnType = old;
-                if (returnType instanceof WildcardType) {
-                    return (Class) ((WildcardType) returnType).getUpperBounds()[0];
-                }
-                return (Class) ((TypeVariable) returnType).getBounds()[0];
+        Type originType = returnType;
+        returnType = genericAndActualMap.get(returnType);
+        if (returnType instanceof Class) {
+            return (Class) returnType;
+        }
+        if (returnType == null) {
+            returnType = originType;
+            if (returnType instanceof WildcardType) {
+                return (Class) ((WildcardType) returnType).getUpperBounds()[0];
             }
         }
+
+        return (Class) ((TypeVariable) returnType).getBounds()[0];
     }
 }

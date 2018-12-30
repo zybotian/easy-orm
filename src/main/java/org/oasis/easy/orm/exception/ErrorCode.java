@@ -13,7 +13,9 @@ public enum ErrorCode {
     OBJECT_CREATING_ERROR(101003, "object create error", "对象创建异常"),
     UNSUPPORTED_OPERATION_ERROR(101004, "unsupported operation error", "不支持的操作"),
     INVALID_PARAM(101005, "invalid param", "无效参数"),
-    MISSING_PARAM(101005, "missing param", "参数缺失"),
+    MISSING_PARAM(101006, "missing param", "参数缺失"),
+    CONFIG_ERROR(101007, "config error", "配置错误"),
+    SERVICE_ERROR(101008, "internal service error", "内部服务错误"),
 
 
     // 其他

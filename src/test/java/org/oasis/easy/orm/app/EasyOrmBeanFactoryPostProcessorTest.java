@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.oasis.easy.orm.dao.UserDao;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Arrays;
