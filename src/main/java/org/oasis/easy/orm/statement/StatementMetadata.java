@@ -73,4 +73,16 @@ public class StatementMetadata {
     public SqlParam[] getSqlParams() {
         return sqlParams;
     }
+
+    public SqlType getSqlType() {
+        return sqlType;
+    }
+
+    public Class getReturnType() {
+        return returnType;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
 }

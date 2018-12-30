@@ -16,6 +16,9 @@ public enum ErrorCode {
     MISSING_PARAM(101006, "missing param", "参数缺失"),
     CONFIG_ERROR(101007, "config error", "配置错误"),
     SERVICE_ERROR(101008, "internal service error", "内部服务错误"),
+    EMPTY_DATA_SET_ERROR(101009, "empty data set error", "空的数据集"),
+    INCORRECT_DATA_SIZE_ERROR(101010, "incorrect data size error", "数据集的size不正确"),
+    INCORRECT_DATA_TYPE_ERROR(101011, "incorrect data type error", "数据类型不正确"),
 
 
     // 其他

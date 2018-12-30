@@ -26,4 +26,16 @@ public class DaoConfig {
     public void setRowMapperFactory(RowMapperFactory rowMapperFactory) {
         this.rowMapperFactory = rowMapperFactory;
     }
+
+    public DataAccessFactory getDataAccessFactory() {
+        return dataAccessFactory;
+    }
+
+    public InterpreterFactory getInterpreterFactory() {
+        return interpreterFactory;
+    }
+
+    public RowMapperFactory getRowMapperFactory() {
+        return rowMapperFactory;
+    }
 }

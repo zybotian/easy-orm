@@ -17,4 +17,8 @@ public class DaoMetadata {
     public Class<?> getDaoClass() {
         return daoClass;
     }
+
+    public DaoConfig getDaoConfig() {
+        return daoConfig;
+    }
 }

@@ -1,8 +1,8 @@
 package org.oasis.easy.orm.utils;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
-import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class SqlTypeUtils {
 
 
     public static boolean matchQuery(String... args) {
-        if (ObjectUtils.isEmpty(args)) {
+        if (ArrayUtils.isEmpty(args)) {
             throw new EasyOrmException(ErrorCode.INVALID_PARAM, "invalid matching select parameters");
         }
         for (Pattern pattern : SELECT_PATTERNS) {
