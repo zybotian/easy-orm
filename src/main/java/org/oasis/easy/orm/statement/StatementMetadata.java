@@ -85,4 +85,8 @@ public class StatementMetadata {
     public Method getMethod() {
         return method;
     }
+
+    public String getSql() {
+        return sql;
+    }
 }

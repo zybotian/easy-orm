@@ -31,9 +31,9 @@ public class UpdateQuerier implements Querier {
     public UpdateQuerier(DataAccessFactory dataAccessFactory, StatementMetadata metaData) {
         this.dataAccessFactory = dataAccessFactory;
         Method method = metaData.getMethod();
-        // 转换基本类型
         Class<?> returnType = metaData.getReturnType();
         if (returnType.isPrimitive()) {
+            // 转换基本类型
             returnType = ClassUtils.primitiveToWrapper(returnType);
         }
         this.returnType = returnType;
