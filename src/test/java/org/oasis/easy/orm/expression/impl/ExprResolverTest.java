@@ -10,7 +10,7 @@ import java.util.Map;
  * @author tianbo
  * @date 2019-01-02
  */
-public class ExprResolverImplTest {
+public class ExprResolverTest {
 
     @Test
     public void testExecuteExpr() throws Exception {
@@ -23,7 +23,7 @@ public class ExprResolverImplTest {
         map.put("$city", "武汉市");
         map.put("$area", "武昌区");
 
-        ExprResolverImpl exprResolver = new ExprResolverImpl(map);
+        ExprResolver exprResolver = new ExprResolver(map);
 
         Assert.assertEquals(1L, exprResolver.evaluate("id"));
         Assert.assertEquals("张三", exprResolver.evaluate("name"));
