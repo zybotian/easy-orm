@@ -27,10 +27,10 @@ public class EasyOrmBeanFactoryPostProcessorTest extends TestCase {
     @Test
     public void testBeanFactory() throws Exception {
         String[] beanDefinitionNames = springContext.getBeanDefinitionNames();
-        List<String> beanDefinationNames = Arrays.asList(beanDefinitionNames);
-        Assert.assertTrue(beanDefinationNames.contains("org.oasis.easy.orm.dao.BookDao"));
-        Assert.assertTrue(beanDefinationNames.contains("org.oasis.easy.orm.dao.UserDao"));
-        Assert.assertFalse(beanDefinationNames.contains("org.oasis.easy.orm.dao.WrongDao"));
-        Assert.assertFalse(beanDefinationNames.contains("org.oasis.easy.orm.dao.IllegalDao"));
+        List<String> beanDefinitionNameList = Arrays.asList(beanDefinitionNames);
+        Assert.assertTrue(beanDefinitionNameList.contains("org.oasis.easy.orm.dao.BookDao"));
+        Assert.assertTrue(beanDefinitionNameList.contains("org.oasis.easy.orm.dao.UserDao"));
+        Assert.assertFalse(beanDefinitionNameList.contains("org.oasis.easy.orm.dao.WrongDao"));
+        Assert.assertFalse(beanDefinitionNameList.contains("org.oasis.easy.orm.dao.IllegalDao"));
     }
 }
