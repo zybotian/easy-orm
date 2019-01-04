@@ -37,4 +37,8 @@ public class StatementRuntime {
     public Map<String, Object> getParameters() {
         return parameters;
     }
+
+    public StatementMetadata getMetadata() {
+        return metadata;
+    }
 }

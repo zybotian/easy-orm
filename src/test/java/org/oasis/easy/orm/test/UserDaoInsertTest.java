@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.test;
 
 import org.junit.Assert;
+import org.junit.Test;
 import org.oasis.easy.orm.dao.UserDao;
 import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class UserDaoInsertTest extends AbstractTestCase {
     @Autowired
     private UserDao userDao;
 
+    @Test
     public void testQuery() throws Exception {
         // setup方法调用了insert,这里只需要验证insert成功即可
         User user = userDao.findByPrimaryKey(1L);

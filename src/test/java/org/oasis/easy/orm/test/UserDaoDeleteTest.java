@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.test;
 
 import org.junit.Assert;
+import org.junit.Test;
 import org.oasis.easy.orm.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,6 +14,7 @@ public class UserDaoDeleteTest extends AbstractTestCase {
     @Autowired
     private UserDao userDao;
 
+    @Test
     public void testDelete() throws Exception {
         Assert.assertEquals(4, userDao.count());
 

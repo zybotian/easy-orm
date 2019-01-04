@@ -41,6 +41,9 @@ public interface UserDao {
     @Sql("select `##(:1)` from " + TABLE_NAME + " limit :2,:3")
     List<String> findListSingle(String field, int offset, int limit);
 
+    @Sql("select " + SELECT_COLUMNS + " from " + TABLE_NAME + " limit :1,:2")
+    List<Map<String, Object>> findMap(int offset, int limit);
+
     @Sql("select `##(:1)` from " + TABLE_NAME + " limit :2,:3")
     Set<String> findSetSingle(String field, int offset, int limit);
 
@@ -64,6 +67,9 @@ public interface UserDao {
     //----------------------------------------插入类-------------------------------------------------------
     @Sql("insert into " + TABLE_NAME + "(" + INSERT_COLUMNS + ")" + "values(" + INSERT_VALUES + ")")
     int insertOne(User user);
+
+    @Sql("insert into " + TABLE_NAME + "(" + INSERT_COLUMNS + ")" + "values(" + INSERT_VALUES + ")")
+    int insertList(List<User> user);
 
     //----------------------------------------修改类-------------------------------------------------------
     @Sql("update " + TABLE_NAME + " set " + UPDATE_COLUMNS + " where id=:1.id")

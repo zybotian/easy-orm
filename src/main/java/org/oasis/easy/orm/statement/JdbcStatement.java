@@ -1,16 +1,16 @@
 package org.oasis.easy.orm.statement;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.oasis.easy.orm.annotations.ReturnGeneratedKeys;
+import org.oasis.easy.orm.annotations.SqlParam;
 import org.oasis.easy.orm.constant.SqlType;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
 import org.oasis.easy.orm.interpreter.Interpreter;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author tianbo
@@ -80,10 +80,30 @@ public class JdbcStatement implements Statement {
 
     @Override
     public Object execute(Map<String, Object> parameters) {
-        StatementRuntime runtime = new StatementRuntime(metadata, parameters);
-        for (Interpreter interpreter : interpreters) {
-            interpreter.interpret(runtime);
+        if (!batchUpdate) {
+            StatementRuntime runtime = new StatementRuntime(metadata, parameters);
+            for (Interpreter interpreter : interpreters) {
+                interpreter.interpret(runtime);
+            }
+            return querier.execute(sqlType, runtime);
         }
-        return querier.execute(sqlType, runtime);
+
+        List<StatementRuntime> runtimes = new LinkedList<>();
+        Iterable<?> iterable = (Iterable<?>) parameters.get(":1");
+        Iterator<?> iterator = iterable.iterator();
+
+        while (iterator.hasNext()) {
+            Object arg = iterator.next();
+            Map<String, Object> args = new HashMap<>(2);
+            args.put(":1", arg);
+
+            StatementRuntime runtime = new StatementRuntime(metadata, args);
+            for (Interpreter interpreter : interpreters) {
+                interpreter.interpret(runtime);
+            }
+            runtimes.add(runtime);
+        }
+
+        return querier.execute(sqlType, runtimes.toArray(new StatementRuntime[runtimes.size()]));
     }
 }

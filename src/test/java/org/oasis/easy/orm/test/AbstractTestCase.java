@@ -8,6 +8,8 @@ import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Arrays;
+
 /**
  * @author tianbo
  * @date 2018-01-04
@@ -53,10 +55,15 @@ public abstract class AbstractTestCase extends TestCase {
                 createUser().setAge(18).setAddress("hubei").setGroupId(100).setMarried(false).setSalary(100.0));
         userDao.insertOne(
                 createUser().setAge(19).setAddress("hunan").setGroupId(101).setMarried(true).setSalary(200.0));
-        userDao.insertOne(
-                createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0));
-        userDao.insertOne(
-                createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0));
+//        userDao.insertOne(
+//                createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0));
+//        userDao.insertOne(
+//                createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0));
+        userDao.insertList(
+                Arrays.asList(
+                        createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0),
+                        createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0)
+                ));
     }
 
     @Override

@@ -12,9 +12,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author tianbo
@@ -46,8 +44,11 @@ public class UpdateQuerier implements Querier {
             case 1: {
                 return executeSingle(runtimes[0]);
             }
-            default: {
+            case 0: {
                 return 0;
+            }
+            default: {
+                return executeBatch(runtimes);
             }
         }
     }
@@ -93,5 +94,33 @@ public class UpdateQuerier implements Querier {
         } else {
             throw new EasyOrmException(ErrorCode.INCORRECT_DATA_TYPE_ERROR, "generated key is not a supported numeric type: " + returnType.getName());
         }
+    }
+
+    private Object executeBatch(StatementRuntime[] runtimes) {
+        List<Object[]> args = new ArrayList<>();
+        for (StatementRuntime runtime : runtimes) {
+            args.add(runtime.getArgs());
+        }
+        DataAccess dataAccess = dataAccessFactory.getDataAccess();
+        String sql = runtimes[0].getSql();
+        int[] batchUpdate = dataAccess.batchUpdate(sql, args);
+        if (returnType == void.class) {
+            return null;
+        }
+        if (returnType == int[].class) {
+            return batchUpdate;
+        }
+        if (returnType == Integer.class || returnType == Boolean.class) {
+            int updated = 1;
+            for (int value : batchUpdate) {
+                if (value < 1) {
+                    updated = 0;
+                    break;
+                }
+            }
+            return returnType == Boolean.class ? updated > 0 : updated;
+        }
+        throw new EasyOrmException(ErrorCode.INVALID_PARAM,
+                "bad return type for batch update: " + runtimes[0].getMetadata().getMethod());
     }
 }

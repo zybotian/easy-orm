@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.test;
 
 import org.junit.Assert;
+import org.junit.Test;
 import org.oasis.easy.orm.dao.UserDao;
 import org.oasis.easy.orm.model.User;
 import org.oasis.easy.orm.model.UserQuery;
@@ -17,6 +18,7 @@ public class UserDaoSelectTest extends AbstractTestCase {
     @Autowired
     private UserDao userDao;
 
+    @Test
     public void testQuery() throws Exception {
         internalTest_FindByPrimaryKey();
         internalTest_FindList();
@@ -28,6 +30,7 @@ public class UserDaoSelectTest extends AbstractTestCase {
         internalTest_FindCollectionSingle();
         internalTest_FindArraySingle();
         internalTest_FindListAdv();
+        internalTest_FindMap();
     }
 
     private void internalTest_FindByPrimaryKey() throws Exception {
@@ -286,5 +289,30 @@ public class UserDaoSelectTest extends AbstractTestCase {
 
         userQuery.setMarried(false);
         Assert.assertTrue(2 == userDao.findListAdv(userQuery).size());
+    }
+
+    private void internalTest_FindMap() {
+        List<Map<String, Object>> mapResult = userDao.findMap(0, 10);
+        for (Map<String, Object> map : mapResult) {
+            if ((Long)map.get("ID") == 1L) {
+                Assert.assertTrue((Integer)map.get("AGE") == 18);
+                Assert.assertTrue((Integer)map.get("GROUP_ID") == 100);
+                Assert.assertTrue("hubei".equals(map.get("ADDRESS").toString()));
+            } else if ((Long)map.get("ID") == 2L) {
+                Assert.assertTrue((Integer)map.get("AGE") == 19);
+                Assert.assertTrue((Integer)map.get("GROUP_ID") == 101);
+                Assert.assertTrue("hunan".equals(map.get("ADDRESS").toString()));
+            } else if ((Long)map.get("ID") == 3L) {
+                Assert.assertTrue((Integer)map.get("AGE") == 20);
+                Assert.assertTrue((Integer)map.get("GROUP_ID") == 100);
+                Assert.assertTrue("shanghai".equals(map.get("ADDRESS").toString()));
+            } else if ((Long)map.get("ID") == 4L) {
+                Assert.assertTrue((Integer)map.get("AGE") == 21);
+                Assert.assertTrue((Integer)map.get("GROUP_ID") == 101);
+                Assert.assertTrue("jiangsu".equals(map.get("ADDRESS").toString()));
+            } else {
+                Assert.fail();
+            }
+        }
     }
 }
