@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
+import org.oasis.easy.orm.expression.IExecPattern;
 import org.oasis.easy.orm.expression.IExecUnit;
 
 import java.util.ArrayList;
@@ -61,11 +62,15 @@ public class ExecCompiler {
         this.length = pattern.length();
     }
 
-    public IExecUnit compile() {
+    protected IExecUnit doCompile() {
         if (StringUtils.isEmpty(pattern)) {
             throw new EasyOrmException(ErrorCode.MISSING_PARAM, "pattern is missing");
         }
         return compileUnit();
+    }
+
+    public IExecPattern compile() {
+        return new ExecPattern(pattern, doCompile());
     }
 
     /**

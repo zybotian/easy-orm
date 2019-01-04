@@ -1,6 +1,6 @@
 package org.oasis.easy.orm.expression.impl;
 
-import org.oasis.easy.orm.expression.IExecUnit;
+import org.oasis.easy.orm.expression.*;
 
 import java.util.List;
 
@@ -13,6 +13,13 @@ public class BunchUnit implements IExecUnit {
 
     public BunchUnit(List<IExecUnit> units) {
         this.units = units;
+    }
+
+    @Override
+    public void fill(IExecContext context, IExprResolver exprResolver) {
+        for (IExecUnit execUnit : units) {
+            execUnit.fill(context, exprResolver);
+        }
     }
 
     public List<IExecUnit> getUnits() {

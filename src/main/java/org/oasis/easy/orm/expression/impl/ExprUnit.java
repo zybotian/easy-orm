@@ -1,6 +1,6 @@
 package org.oasis.easy.orm.expression.impl;
 
-import org.oasis.easy.orm.expression.IExecUnit;
+import org.oasis.easy.orm.expression.*;
 
 /**
  * @author tianbo
@@ -11,6 +11,12 @@ public class ExprUnit implements IExecUnit {
 
     public ExprUnit(String expr) {
         this.expr = expr;
+    }
+
+    @Override
+    public void fill(IExecContext context, IExprResolver exprResolver) {
+        Object result = exprResolver.evaluate(expr);
+        context.fillValue(result);
     }
 
     public String getExpr() {

@@ -14,6 +14,7 @@ public interface CreateTableDao {
             + "(id bigint not null auto_increment primary key"
             + ",name varchar(32) not null "
             + ",age int not null"
+            + ",group_id int not null"
             + ",address varchar(16) not null"
             + ",married int not null"
             + ",salary decimal(20,2) not null"

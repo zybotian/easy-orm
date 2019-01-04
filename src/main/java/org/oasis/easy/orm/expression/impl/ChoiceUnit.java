@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.expression.impl;
 
-import org.oasis.easy.orm.expression.IExecUnit;
+import org.oasis.easy.orm.expression.*;
+import org.oasis.easy.orm.utils.ExecUtils;
 
 /**
  * @author tianbo
@@ -12,6 +13,7 @@ public class ChoiceUnit implements IExecUnit {
 
     private final IExecUnit ifUnit, elseUnit;
 
+
     public ChoiceUnit(String expr, IExecUnit ifUnit, IExecUnit elseUnit) {
         this.expr = expr;
         this.ifUnit = ifUnit;
@@ -20,6 +22,17 @@ public class ChoiceUnit implements IExecUnit {
 
     public ChoiceUnit(String expr, IExecUnit ifUnit) {
         this(expr, ifUnit, null);
+    }
+
+    @Override
+    public void fill(IExecContext context, IExprResolver exprResolver) {
+        Object obj = exprResolver.evaluate(expr);
+
+        if (ExecUtils.isValid(obj)) {
+            ifUnit.fill(context, exprResolver);
+        } else if (elseUnit != null) {
+            elseUnit.fill(context, exprResolver);
+        }
     }
 
     public String getExpr() {

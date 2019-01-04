@@ -32,9 +32,5 @@ public class EasyOrmBeanFactoryPostProcessorTest extends TestCase {
         Assert.assertTrue(beanDefinationNames.contains("org.oasis.easy.orm.dao.UserDao"));
         Assert.assertFalse(beanDefinationNames.contains("org.oasis.easy.orm.dao.WrongDao"));
         Assert.assertFalse(beanDefinationNames.contains("org.oasis.easy.orm.dao.IllegalDao"));
-
-//        UserDao userDao = (UserDao) springContext.getBean("org.oasis.easy.orm.dao.UserDao");
-//        Long result = userDao.findByPrimaryKey(1L);
-//        Assert.assertTrue(1 == result);
     }
 }

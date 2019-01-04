@@ -50,4 +50,22 @@ public class ExecUtils {
         }
         return new Object[]{obj};
     }
+
+    public static boolean isValid(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (obj instanceof Boolean) {
+            return (Boolean) obj;
+        } else if (obj instanceof CharSequence) {
+            return ((CharSequence) obj).length() > 0;
+        } else if (obj instanceof Collection) {
+            return ((Collection) obj).size() > 0;
+        } else if (obj instanceof Map) {
+            return ((Map) obj).size() > 0;
+        } else if (obj.getClass().isArray()) {
+            return Array.getLength(obj) > 0;
+        }
+
+        return true;
+    }
 }

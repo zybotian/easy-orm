@@ -28,7 +28,8 @@ public class DataAccessFactoryImpl implements DataAccessFactory {
         }
         DataAccess dataAccess = dataAccessCache.get(dataSource);
         if (dataAccess == null) {
-            dataAccessCache.put(dataSource, new DataAccessImpl(dataSource));
+            dataAccess = new DataAccessImpl(dataSource);
+            dataAccessCache.put(dataSource, dataAccess);
         }
         return dataAccess;
     }

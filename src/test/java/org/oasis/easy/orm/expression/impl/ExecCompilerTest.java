@@ -12,44 +12,44 @@ public class ExecCompilerTest {
     @Test
     public void testDelete() throws Exception {
         String sql1 = "DELETE FROM user WHERE account_time=:1";
-        ExecCompiler compiler1 = new ExecCompiler(sql1);
-        BunchUnit units1 = (BunchUnit) compiler1.compile();
+        ExecCompiler doCompiler1 = new ExecCompiler(sql1);
+        BunchUnit units1 = (BunchUnit) doCompiler1.doCompile();
         Assert.assertEquals("DELETE FROM user WHERE account_time=", units1.getUnits().get(0).toString());
         Assert.assertEquals(":1", units1.getUnits().get(1).toString());
 
         String sql2 = "DELETE FROM user WHERE account_time=:1 AND status=1";
-        ExecCompiler compiler2 = new ExecCompiler(sql2);
-        BunchUnit units2 = (BunchUnit) compiler2.compile();
+        ExecCompiler doCompiler2 = new ExecCompiler(sql2);
+        BunchUnit units2 = (BunchUnit) doCompiler2.doCompile();
         Assert.assertEquals("DELETE FROM user WHERE account_time=", units2.getUnits().get(0).toString());
         Assert.assertEquals(":1", units2.getUnits().get(1).toString());
         Assert.assertEquals(" AND status=1", units2.getUnits().get(2).toString());
 
         String sql3 = "DELETE FROM user WHERE 1=1";
-        ExecCompiler compiler3 = new ExecCompiler(sql3);
-        TextUnit units3 = (TextUnit) compiler3.compile();
+        ExecCompiler doCompiler3 = new ExecCompiler(sql3);
+        TextUnit units3 = (TextUnit) doCompiler3.doCompile();
         Assert.assertEquals("DELETE FROM user WHERE 1=1", units3.toString());
 
         String sql4 = "DELETE FROM user";
-        ExecCompiler compiler4 = new ExecCompiler(sql4);
-        TextUnit units4 = (TextUnit) compiler4.compile();
+        ExecCompiler doCompiler4 = new ExecCompiler(sql4);
+        TextUnit units4 = (TextUnit) doCompiler4.doCompile();
         Assert.assertEquals("DELETE FROM user", units4.toString());
 
         String sql5 = "DELETE * FROM user";
-        ExecCompiler compiler5 = new ExecCompiler(sql5);
-        TextUnit units5 = (TextUnit) compiler5.compile();
+        ExecCompiler doCompiler5 = new ExecCompiler(sql5);
+        TextUnit units5 = (TextUnit) doCompiler5.doCompile();
         Assert.assertEquals("DELETE * FROM user", units5.toString());
     }
 
     @Test
     public void testUpdate() throws Exception {
         String sql1 = "UPDATE Person SET Address = 1, City = 2 WHERE LastName = 3";
-        ExecCompiler compiler1 = new ExecCompiler(sql1);
-        TextUnit units1 = (TextUnit) compiler1.compile();
+        ExecCompiler doCompiler1 = new ExecCompiler(sql1);
+        TextUnit units1 = (TextUnit) doCompiler1.doCompile();
         Assert.assertEquals("UPDATE Person SET Address = 1, City = 2 WHERE LastName = 3", units1.toString());
 
         String sql2 = "UPDATE Person SET Address = :1, City = :2 WHERE LastName = :3";
-        ExecCompiler compiler2 = new ExecCompiler(sql2);
-        BunchUnit units2 = (BunchUnit) compiler2.compile();
+        ExecCompiler doCompiler2 = new ExecCompiler(sql2);
+        BunchUnit units2 = (BunchUnit) doCompiler2.doCompile();
         Assert.assertEquals("UPDATE Person SET Address = ", units2.getUnits().get(0).toString());
         Assert.assertEquals(":1", units2.getUnits().get(1).toString());
         Assert.assertEquals(", City = ", units2.getUnits().get(2).toString());
@@ -58,8 +58,8 @@ public class ExecCompilerTest {
         Assert.assertEquals(":3", units2.getUnits().get(5).toString());
 
         String sql3 = "UPDATE Person SET Address = :1.address, City = :1.city WHERE LastName = :1.lastName";
-        ExecCompiler compiler3 = new ExecCompiler(sql3);
-        BunchUnit units3 = (BunchUnit) compiler3.compile();
+        ExecCompiler doCompiler3 = new ExecCompiler(sql3);
+        BunchUnit units3 = (BunchUnit) doCompiler3.doCompile();
         Assert.assertEquals("UPDATE Person SET Address = ", units3.getUnits().get(0).toString());
         Assert.assertEquals(":1.address", units3.getUnits().get(1).toString());
         Assert.assertEquals(", City = ", units3.getUnits().get(2).toString());
@@ -68,8 +68,8 @@ public class ExecCompilerTest {
         Assert.assertEquals(":1.lastName", units3.getUnits().get(5).toString());
 
         String sql4 = "UPDATE Person SET Address = :address, City = :city WHERE LastName = :lastName";
-        ExecCompiler compiler4 = new ExecCompiler(sql4);
-        BunchUnit units4 = (BunchUnit) compiler4.compile();
+        ExecCompiler doCompiler4 = new ExecCompiler(sql4);
+        BunchUnit units4 = (BunchUnit) doCompiler4.doCompile();
         Assert.assertEquals("UPDATE Person SET Address = ", units4.getUnits().get(0).toString());
         Assert.assertEquals(":address", units4.getUnits().get(1).toString());
         Assert.assertEquals(", City = ", units4.getUnits().get(2).toString());
@@ -81,45 +81,45 @@ public class ExecCompilerTest {
     @Test
     public void testSelect() throws Exception {
         String sql1 = "SELECT count(id) FROM user";
-        ExecCompiler compiler1 = new ExecCompiler(sql1);
-        TextUnit units1 = (TextUnit) compiler1.compile();
+        ExecCompiler doCompiler1 = new ExecCompiler(sql1);
+        TextUnit units1 = (TextUnit) doCompiler1.doCompile();
         Assert.assertEquals(sql1, units1.toString());
 
         String sql2 = "SELECT count(id) FROM user WHERE application_id=:1.appId";
-        ExecCompiler compiler2 = new ExecCompiler(sql2);
-        BunchUnit units2 = (BunchUnit) compiler2.compile();
+        ExecCompiler doCompiler2 = new ExecCompiler(sql2);
+        BunchUnit units2 = (BunchUnit) doCompiler2.doCompile();
         String[] unitStr2 = {"SELECT count(id) FROM user WHERE application_id=", ":1.appId"};
         for (int i = 0; i < unitStr2.length; i++) {
             Assert.assertEquals(unitStr2[i], units2.getUnits().get(i).toString());
         }
 
         String sql3 = "SELECT count(*) FROM user WHERE application_id=:1.appId";
-        ExecCompiler compiler3 = new ExecCompiler(sql3);
-        BunchUnit units3 = (BunchUnit) compiler3.compile();
+        ExecCompiler doCompiler3 = new ExecCompiler(sql3);
+        BunchUnit units3 = (BunchUnit) doCompiler3.doCompile();
         String[] unitStr3 = {"SELECT count(*) FROM user WHERE application_id=", ":1.appId"};
         for (int i = 0; i < unitStr3.length; i++) {
             Assert.assertEquals(unitStr3[i], units3.getUnits().get(i).toString());
         }
 
         String sql4 = "SELECT count(1) FROM user WHERE application_id=:1.appId";
-        ExecCompiler compiler4 = new ExecCompiler(sql4);
-        BunchUnit units4 = (BunchUnit) compiler4.compile();
+        ExecCompiler doCompiler4 = new ExecCompiler(sql4);
+        BunchUnit units4 = (BunchUnit) doCompiler4.doCompile();
         String[] unitStr4 = {"SELECT count(1) FROM user WHERE application_id=", ":1.appId"};
         for (int i = 0; i < unitStr4.length; i++) {
             Assert.assertEquals(unitStr4[i], units4.getUnits().get(i).toString());
         }
 
         String sql5 = "SELECT count(1) FROM user WHERE application_id=:1";
-        ExecCompiler compiler5 = new ExecCompiler(sql5);
-        BunchUnit units5 = (BunchUnit) compiler5.compile();
+        ExecCompiler doCompiler5 = new ExecCompiler(sql5);
+        BunchUnit units5 = (BunchUnit) doCompiler5.doCompile();
         String[] unitStr5 = {"SELECT count(1) FROM user WHERE application_id=", ":1"};
         for (int i = 0; i < unitStr5.length; i++) {
             Assert.assertEquals(unitStr5[i], units5.getUnits().get(i).toString());
         }
 
         String sql6 = "SELECT count(distinct(id)) FROM user WHERE application_id IN (:1.appId)";
-        ExecCompiler compiler6 = new ExecCompiler(sql6);
-        BunchUnit units6 = (BunchUnit) compiler6.compile();
+        ExecCompiler doCompiler6 = new ExecCompiler(sql6);
+        BunchUnit units6 = (BunchUnit) doCompiler6.doCompile();
         String[] unitStr6 = {"SELECT count(distinct(id)) FROM user WHERE application_id IN (", ":1.appId", ")"};
 
         for (int i = 0; i < unitStr6.length; i++) {
@@ -127,8 +127,8 @@ public class ExecCompilerTest {
         }
 
         String sql7 = "SELECT user_id FROM user WHERE create_time>=:time1 and create_time<:time2 ORDER BY create_time DESC LIMIT :offset,:limit";
-        ExecCompiler compiler7 = new ExecCompiler(sql7);
-        BunchUnit units7 = (BunchUnit) compiler7.compile();
+        ExecCompiler doCompiler7 = new ExecCompiler(sql7);
+        BunchUnit units7 = (BunchUnit) doCompiler7.doCompile();
         String[] unitStr7 = {"SELECT user_id FROM user WHERE create_time>=", ":time1", " and create_time<", ":time2",
                 " ORDER BY create_time DESC LIMIT ", ":offset", ",", ":limit"};
         for (int i = 0; i < unitStr7.length; i++) {
@@ -141,8 +141,8 @@ public class ExecCompilerTest {
                 + "#if(:groupBy!=null) { GROUP BY ##(:groupBy) }"
                 + "#if(:orderBy!=null) { ORDER BY ##(:orderBy) } #else { ORDER BY create_time DESC }"
                 + "#if(:limit>0) { LIMIT :limit } #else { LIMIT 20 }";
-        ExecCompiler compiler8 = new ExecCompiler(sql8);
-        BunchUnit units8 = (BunchUnit) compiler8.compile();
+        ExecCompiler doCompiler8 = new ExecCompiler(sql8);
+        BunchUnit units8 = (BunchUnit) doCompiler8.doCompile();
         Assert.assertEquals("SELECT id,name FROM ", units8.getUnits().get(0).toString());
 
         JoinUnit joinExprUnit81 = (JoinUnit) units8.getUnits().get(1);
@@ -188,8 +188,8 @@ public class ExecCompilerTest {
                 + ",create_time bigint not null"
                 + ",update_time bigint not null"
                 + ");";
-        ExecCompiler compiler = new ExecCompiler(createUserTable);
-        TextUnit textUnit = (TextUnit) compiler.compile();
+        ExecCompiler doCompiler = new ExecCompiler(createUserTable);
+        TextUnit textUnit = (TextUnit) doCompiler.doCompile();
         Assert.assertEquals(createUserTable, textUnit.toString());
 
         createUserTable = "CREATE TABLE IF NOT EXISTS `service_code` (" +
@@ -213,8 +213,8 @@ public class ExecCompilerTest {
                 "  ENGINE = InnoDB" +
                 "  AUTO_INCREMENT = 1" +
                 "  DEFAULT CHARSET = utf8;";
-        ExecCompiler compiler1 = new ExecCompiler(createUserTable);
-        TextUnit textUnit1 = (TextUnit) compiler1.compile();
+        ExecCompiler doCompiler1 = new ExecCompiler(createUserTable);
+        TextUnit textUnit1 = (TextUnit) doCompiler1.doCompile();
         Assert.assertEquals(createUserTable, textUnit1.toString());
     }
 
@@ -222,24 +222,24 @@ public class ExecCompilerTest {
     public void testInsert() throws Exception {
 
         String insert = "insert into user values(:1.id,:1.name)";
-        ExecCompiler compiler = new ExecCompiler(insert);
-        BunchUnit units = (BunchUnit) compiler.compile();
+        ExecCompiler doCompiler = new ExecCompiler(insert);
+        BunchUnit units = (BunchUnit) doCompiler.doCompile();
         String[] unintStr1 = {"insert into user values(", ":1.id", ",", ":1.name", ")"};
         for (int i = 0; i < units.getUnits().size(); i++) {
             Assert.assertEquals(unintStr1[i], units.getUnits().get(i).toString());
         }
 
         String insert2 = "insert into user values(:entity.id,:entity.name)";
-        ExecCompiler compiler2 = new ExecCompiler(insert2);
-        units = (BunchUnit) compiler2.compile();
+        ExecCompiler doCompiler2 = new ExecCompiler(insert2);
+        units = (BunchUnit) doCompiler2.doCompile();
         String[] unintStr2 = {"insert into user values(", ":entity.id", ",", ":entity.name", ")"};
         for (int i = 0; i < units.getUnits().size(); i++) {
             Assert.assertEquals(unintStr2[i], units.getUnits().get(i).toString());
         }
 
         String insert3 = "insert into `user`(`id`,`name`) values(:entity.id,:entity.name)";
-        ExecCompiler compiler3 = new ExecCompiler(insert3);
-        units = (BunchUnit) compiler3.compile();
+        ExecCompiler doCompiler3 = new ExecCompiler(insert3);
+        units = (BunchUnit) doCompiler3.doCompile();
         String[] unintStr3 = {"insert into `user`(`id`,`name`) values(", ":entity.id", ",", ":entity.name", ")"};
         for (int i = 0; i < units.getUnits().size(); i++) {
             Assert.assertEquals(unintStr3[i], units.getUnits().get(i).toString());

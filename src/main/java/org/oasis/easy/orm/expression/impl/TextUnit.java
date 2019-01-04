@@ -1,6 +1,6 @@
 package org.oasis.easy.orm.expression.impl;
 
-import org.oasis.easy.orm.expression.IExecUnit;
+import org.oasis.easy.orm.expression.*;
 
 /**
  * @author tianbo
@@ -11,6 +11,11 @@ public class TextUnit implements IExecUnit {
 
     public TextUnit(String text) {
         this.text = text;
+    }
+
+    @Override
+    public void fill(IExecContext context, IExprResolver exprResolver) {
+        context.fillText(text);
     }
 
     public String getText() {

@@ -27,8 +27,8 @@ public class SelectQuerier implements Querier {
     public SelectQuerier(DataAccessFactory dataAccessFactory, StatementMetadata metaData, RowMapper rowMapper) {
         this.dataAccessFactory = dataAccessFactory;
         this.rowMapper = rowMapper;
+        this.returnType = metaData.getReturnType();
         this.converter = getResultConverter();
-        this.returnType = metaData.getClass();
     }
 
     @Override

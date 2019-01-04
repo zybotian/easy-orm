@@ -89,4 +89,8 @@ public class StatementMetadata {
     public String getSql() {
         return sql;
     }
+
+    public Class[] getGenericReturnTypes() {
+        return genericType;
+    }
 }

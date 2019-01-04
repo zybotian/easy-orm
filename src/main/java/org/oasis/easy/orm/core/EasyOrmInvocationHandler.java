@@ -55,11 +55,11 @@ public class EasyOrmInvocationHandler implements InvocationHandler {
 
         // 拼装参数
         Map<String, Object> parameters = new HashMap<>();
-        StatementMetadata statementMetaData = statement.getMetadata();
+        StatementMetadata statementMetadata = statement.getMetadata();
         if (ArrayUtils.isNotEmpty(args)) {
             for (int i = 0; i < args.length; i++) {
                 parameters.put(INDEX_NAMES[i], args[i]);
-                SqlParam sqlParam = statementMetaData.getSqlParams()[i];
+                SqlParam sqlParam = statementMetadata.getSqlParams()[i];
                 if (sqlParam != null) {
                     parameters.put(sqlParam.value(), args[i]);
                 }
