@@ -36,4 +36,6 @@ public interface IOperationMapper {
     IEntityMapper getEntityMapper();
 
     void setEntityMapperFactory(EntityMapperFactory entityMapperFactory);
+
+    boolean isPrimaryKeyMode();
 }

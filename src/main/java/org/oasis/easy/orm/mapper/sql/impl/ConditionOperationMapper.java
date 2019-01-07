@@ -70,4 +70,10 @@ public class ConditionOperationMapper implements IOperationMapper {
     public void setEntityMapperFactory(EntityMapperFactory entityMapperFactory) {
         this.entityMapperFactory = entityMapperFactory;
     }
+
+    @Override
+    public boolean isPrimaryKeyMode() {
+        // TODO 实现
+        return true;
+    }
 }

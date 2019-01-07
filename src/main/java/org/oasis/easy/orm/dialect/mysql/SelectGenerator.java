@@ -22,7 +22,6 @@ public class SelectGenerator extends ConditionGenerator {
         generatedSql.append(operationMapper.getOperationName());
         generatedSql.append(" ");
 
-        System.out.println(columnMappers);
         for (IColumnMapper columnMapper : columnMappers) {
             generatedSql.append(columnMapper.getName() + ",");
         }
@@ -34,7 +33,6 @@ public class SelectGenerator extends ConditionGenerator {
     @Override
     protected void applyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
         super.applyCondition(operationMapper, statementRuntime, generatedSql);
-        generatedSql.append(" where id=1");
     }
 
     @Override

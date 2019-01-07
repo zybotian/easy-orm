@@ -14,4 +14,9 @@ public interface IColumnMapper {
      * 字段名字
      */
     String getFieldName();
+
+    /**
+     * 是否是主键
+     */
+    boolean isPrimaryKey();
 }

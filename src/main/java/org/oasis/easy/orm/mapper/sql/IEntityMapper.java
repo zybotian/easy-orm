@@ -16,4 +16,9 @@ public interface IEntityMapper {
      * 表的名字
      */
     String getTableName();
+
+    /**
+     * 主键对应的列
+     */
+    List<IColumnMapper> getPrimaryKeyColumnMappers();
 }

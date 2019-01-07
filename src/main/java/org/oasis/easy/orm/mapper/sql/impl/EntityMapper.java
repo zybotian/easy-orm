@@ -1,5 +1,6 @@
 package org.oasis.easy.orm.mapper.sql.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.oasis.easy.orm.annotations.Column;
@@ -22,11 +23,29 @@ public class EntityMapper implements IEntityMapper {
 
     private List<IColumnMapper> columnMappers;
 
+    private List<IColumnMapper> primaryKeyColumnMappers;
+
     private String tableName;
 
     public EntityMapper(Class<?> clazz) {
         columnMappers = generateColumnMappers(clazz);
         tableName = generateTableName(clazz);
+        primaryKeyColumnMappers = extractPrimaryKeyColumnMappers();
+    }
+
+    private List<IColumnMapper> extractPrimaryKeyColumnMappers() {
+        primaryKeyColumnMappers = new LinkedList<>();
+        if (CollectionUtils.isEmpty(columnMappers)) {
+            return primaryKeyColumnMappers;
+        }
+
+        for (IColumnMapper columnMapper : columnMappers) {
+            if (columnMapper.isPrimaryKey()) {
+                primaryKeyColumnMappers.add(columnMapper);
+            }
+        }
+
+        return primaryKeyColumnMappers;
     }
 
     private List<IColumnMapper> generateColumnMappers(Class<?> clazz) {
@@ -62,5 +81,10 @@ public class EntityMapper implements IEntityMapper {
     @Override
     public String getTableName() {
         return tableName;
+    }
+
+    @Override
+    public List<IColumnMapper> getPrimaryKeyColumnMappers() {
+        return primaryKeyColumnMappers;
     }
 }

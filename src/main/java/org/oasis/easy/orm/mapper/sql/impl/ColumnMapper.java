@@ -34,4 +34,9 @@ public class ColumnMapper implements IColumnMapper {
     public String getFieldName() {
         return field.getName();
     }
+
+    @Override
+    public boolean isPrimaryKey() {
+        return column.pk();
+    }
 }
