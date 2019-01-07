@@ -93,4 +93,8 @@ public class StatementMetadata {
     public Class[] getGenericReturnTypes() {
         return genericType;
     }
+
+    public DaoMetadata getDaoMetadata() {
+        return daoMetadata;
+    }
 }

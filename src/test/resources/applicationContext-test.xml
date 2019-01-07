@@ -18,4 +18,7 @@
     <bean class="org.oasis.easy.orm.core.EasyOrmBeanFactoryPostProcessor">
         <constructor-arg value="org.oasis.easy.orm.dao"/>
     </bean>
+
+    <bean class="org.oasis.easy.orm.interpreter.SqlManagerInterpreter">
+    </bean>
 </beans>  
