@@ -1,9 +1,7 @@
 package org.oasis.easy.orm.statement;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.oasis.easy.orm.annotations.ReturnGeneratedKeys;
-import org.oasis.easy.orm.annotations.SqlParam;
 import org.oasis.easy.orm.constant.SqlType;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;

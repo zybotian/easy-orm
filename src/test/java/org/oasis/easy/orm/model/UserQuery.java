@@ -18,6 +18,8 @@ public class UserQuery {
     private List<Integer> groups;
     private Boolean married;
     private String address;
+    private String orderBy;
+    private String orderType;
     private Integer offset;
     private Integer pageSize;
 }

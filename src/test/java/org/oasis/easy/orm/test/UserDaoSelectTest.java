@@ -3,8 +3,7 @@ package org.oasis.easy.orm.test;
 import org.junit.Assert;
 import org.junit.Test;
 import org.oasis.easy.orm.dao.UserDao;
-import org.oasis.easy.orm.model.User;
-import org.oasis.easy.orm.model.UserQuery;
+import org.oasis.easy.orm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -31,6 +30,7 @@ public class UserDaoSelectTest extends AbstractTestCase {
         internalTest_FindArraySingle();
         internalTest_FindListAdv();
         internalTest_FindMap();
+        internalTest_countGroup();
     }
 
     private void internalTest_FindByPrimaryKey() throws Exception {
@@ -262,7 +262,19 @@ public class UserDaoSelectTest extends AbstractTestCase {
         userQuery.setGroups(null);
         userQuery.setName("test%");
         Assert.assertTrue(4 == userDao.findListAdv(userQuery).size());
+        userQuery.setOrderBy("age");
+        userQuery.setOrderType("desc");
+        List<User> users = userDao.findListAdv(userQuery);
+        Assert.assertTrue(users.get(0).getAge() == 21);
+        Assert.assertTrue(users.get(1).getAge() == 20);
+        Assert.assertTrue(users.get(2).getAge() == 19);
+        Assert.assertTrue(users.get(3).getAge() == 18);
 
+        userQuery.setOrderType(null);
+        userQuery.setOrderBy(null);
+
+        userQuery.setOrderBy(null);
+        userQuery.setOrderType(null);
         userQuery.setName(null);
         userQuery.setMinAge(18);
         userQuery.setMaxAge(20);
@@ -294,25 +306,33 @@ public class UserDaoSelectTest extends AbstractTestCase {
     private void internalTest_FindMap() {
         List<Map<String, Object>> mapResult = userDao.findMap(0, 10);
         for (Map<String, Object> map : mapResult) {
-            if ((Long)map.get("ID") == 1L) {
-                Assert.assertTrue((Integer)map.get("AGE") == 18);
-                Assert.assertTrue((Integer)map.get("GROUP_ID") == 100);
+            if ((Long) map.get("ID") == 1L) {
+                Assert.assertTrue((Integer) map.get("AGE") == 18);
+                Assert.assertTrue((Integer) map.get("GROUP_ID") == 100);
                 Assert.assertTrue("hubei".equals(map.get("ADDRESS").toString()));
-            } else if ((Long)map.get("ID") == 2L) {
-                Assert.assertTrue((Integer)map.get("AGE") == 19);
-                Assert.assertTrue((Integer)map.get("GROUP_ID") == 101);
+            } else if ((Long) map.get("ID") == 2L) {
+                Assert.assertTrue((Integer) map.get("AGE") == 19);
+                Assert.assertTrue((Integer) map.get("GROUP_ID") == 101);
                 Assert.assertTrue("hunan".equals(map.get("ADDRESS").toString()));
-            } else if ((Long)map.get("ID") == 3L) {
-                Assert.assertTrue((Integer)map.get("AGE") == 20);
-                Assert.assertTrue((Integer)map.get("GROUP_ID") == 100);
+            } else if ((Long) map.get("ID") == 3L) {
+                Assert.assertTrue((Integer) map.get("AGE") == 20);
+                Assert.assertTrue((Integer) map.get("GROUP_ID") == 100);
                 Assert.assertTrue("shanghai".equals(map.get("ADDRESS").toString()));
-            } else if ((Long)map.get("ID") == 4L) {
-                Assert.assertTrue((Integer)map.get("AGE") == 21);
-                Assert.assertTrue((Integer)map.get("GROUP_ID") == 101);
+            } else if ((Long) map.get("ID") == 4L) {
+                Assert.assertTrue((Integer) map.get("AGE") == 21);
+                Assert.assertTrue((Integer) map.get("GROUP_ID") == 101);
                 Assert.assertTrue("jiangsu".equals(map.get("ADDRESS").toString()));
             } else {
                 Assert.fail();
             }
         }
+    }
+
+    private void internalTest_countGroup() {
+        List<GroupResult> groupResults = userDao.countGroup();
+        Assert.assertEquals("100", groupResults.get(0).getGroupId());
+        Assert.assertEquals("101", groupResults.get(1).getGroupId());
+        Assert.assertEquals(2, groupResults.get(0).getCount());
+        Assert.assertEquals(2, groupResults.get(1).getCount());
     }
 }
