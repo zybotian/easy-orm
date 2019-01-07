@@ -15,9 +15,6 @@ public class GenericUtils {
 
     /**
      * 返回泛型的容器类型
-     * @param invocationClass
-     * @param targetType
-     * @return
      */
     public static Class[] resolveTypeParameters(Class invocationClass, Type targetType) {
         if (targetType instanceof ParameterizedType) {
@@ -35,9 +32,6 @@ public class GenericUtils {
 
     /**
      * 返回泛型的类型
-     * @param invocationClass
-     * @param targetType
-     * @return
      */
     public static Class resolveTypeVariable(Class invocationClass, Type targetType) {
         if (targetType == null) {
@@ -99,5 +93,26 @@ public class GenericUtils {
         }
 
         return (Class) ((TypeVariable) returnType).getBounds()[0];
+    }
+
+    /**
+     * 返回泛型参数的实际类型
+     *
+     * @param actualClass   实际的类
+     * @param declaredClass 基类
+     * @param typeVarName   基类的泛型参数名字
+     */
+    public static Class resolveTypeVariable(Class actualClass, Class declaredClass, String typeVarName) {
+        TypeVariable typeVariable = null;
+        for (TypeVariable typeParameter : declaredClass.getTypeParameters()) {
+            if (typeParameter.getName().equals(typeVarName)) {
+                typeVariable = typeParameter;
+                break;
+            }
+        }
+        if (typeVariable == null) {
+            throw new EasyOrmException(ErrorCode.SERVICE_ERROR, "type variable name " + typeVarName + " not found");
+        }
+        return resolveTypeVariable(actualClass, typeVariable);
     }
 }

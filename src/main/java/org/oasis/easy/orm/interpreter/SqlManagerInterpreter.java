@@ -7,13 +7,17 @@ import org.oasis.easy.orm.dialect.IDialect;
 import org.oasis.easy.orm.dialect.mysql.MySqlDialect;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
-import org.oasis.easy.orm.mapper.sql.ConditionOperationMapper;
 import org.oasis.easy.orm.mapper.sql.IOperationMapper;
+import org.oasis.easy.orm.mapper.sql.impl.OperationMapperFactory;
 import org.oasis.easy.orm.statement.StatementMetadata;
 import org.oasis.easy.orm.statement.StatementRuntime;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.Order;
 
+/**
+ * @author tianbo
+ * @date 2019-01-07
+ */
 @Order(-1)
 public class SqlManagerInterpreter implements Interpreter, InitializingBean {
 
@@ -28,8 +32,14 @@ public class SqlManagerInterpreter implements Interpreter, InitializingBean {
 
     private IDialect dialect;
 
+    private OperationMapperFactory operationMapperFactory;
+
     public void setDialect(IDialect dialect) {
         this.dialect = dialect;
+    }
+
+    public void setOperationMapperFactory(OperationMapperFactory operationMapperFactory) {
+        this.operationMapperFactory = operationMapperFactory;
     }
 
     @Override
@@ -45,7 +55,7 @@ public class SqlManagerInterpreter implements Interpreter, InitializingBean {
                  * 第一种情况:方法上没有标记@Sql注解(实际此种情况居多)
                  * 第二种情况:方法标记了@Sql注解,但没有写具体的sql语句
                  */
-                IOperationMapper operationMapper = new ConditionOperationMapper();
+                IOperationMapper operationMapper = operationMapperFactory.create(metadata);
                 interpreter = new SqlGeneratorInterpreter(operationMapper);
             }
         }
@@ -56,6 +66,9 @@ public class SqlManagerInterpreter implements Interpreter, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         if (dialect == null) {
             dialect = new MySqlDialect();
+        }
+        if (operationMapperFactory == null) {
+            operationMapperFactory = new OperationMapperFactory();
         }
     }
 

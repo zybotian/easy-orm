@@ -1,5 +1,7 @@
 package org.oasis.easy.orm.statement;
 
+import org.oasis.easy.orm.utils.GenericUtils;
+
 /**
  * @author tianbo
  * @date 2018-12-29
@@ -20,5 +22,9 @@ public class DaoMetadata {
 
     public DaoConfig getDaoConfig() {
         return daoConfig;
+    }
+
+    public Class resolveTypeVariable(Class<?> declaredClass, String typeVarName) {
+        return GenericUtils.resolveTypeVariable(daoClass, declaredClass, typeVarName);
     }
 }
