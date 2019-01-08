@@ -19,11 +19,16 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String WHERE = " WHERE ";
     protected static final String AND = " AND ";
     protected static final String FROM = " FROM ";
+    protected static final String INTO = " INTO ";
+    protected static final String VALUES = " VALUES ";
 
     // sql中的各种符号,前后都不带空格
     protected static final String COMMA = ",";
     protected static final String EQUALS = "=";
     protected static final String COLON = ":";
+    protected static final String BRACKETS_LEFT = "(";
+    protected static final String BRACKETS_RIGHT = ")";
+
 
     @Override
     public String generate(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime) {

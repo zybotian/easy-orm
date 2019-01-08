@@ -19,7 +19,7 @@ public interface BasicDao<ENTITY, ID> {
      * 插入一条记录
      */
     @ReturnGeneratedKeys
-    int insert(ENTITY entity);
+    ID insert(ENTITY entity);
 
     /**
      * 批量插入
