@@ -15,12 +15,23 @@ import java.util.List;
  */
 public abstract class ConditionGenerator implements ISqlGenerator<ConditionOperationMapper> {
 
+    // sql关键词,前后都带上空格
+    protected static final String WHERE = " WHERE ";
+    protected static final String AND = " AND ";
+    protected static final String FROM = " FROM ";
+
+    // sql中的各种符号,前后都不带空格
+    protected static final String COMMA = ",";
+    protected static final String EQUALS = "=";
+    protected static final String COLON = ":";
+
     @Override
     public String generate(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime) {
         StringBuilder generatedSql = new StringBuilder();
         beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         applyCondition(operationMapper, statementRuntime, generatedSql);
         afterApplyCondition(operationMapper, statementRuntime, generatedSql);
+//        System.out.println("generated sql[" + generatedSql + "]");
         return generatedSql.toString();
     }
 
@@ -36,17 +47,17 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     }
 
     private void applyConditionByPrimaryKeyMode(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
-        generatedSql.append(" where ");
+        generatedSql.append(WHERE);
         List<IColumnMapper> primaryKey = operationMapper.getEntityMapper().getPrimaryKeyColumnMappers();
 
         for (int i = 0; i < primaryKey.size(); i++) {
             IColumnMapper columnMapper = primaryKey.get(i);
             if (i > 0) {
-                generatedSql.append(" AND ");
+                generatedSql.append(AND);
             }
             generatedSql.append(columnMapper.getName());
-            generatedSql.append(" = ");
-            generatedSql.append(":");
+            generatedSql.append(EQUALS);
+            generatedSql.append(COLON);
             generatedSql.append(i + 1);
         }
     }

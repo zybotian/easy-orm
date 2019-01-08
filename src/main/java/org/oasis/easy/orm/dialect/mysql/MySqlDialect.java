@@ -22,6 +22,7 @@ public class MySqlDialect implements IDialect {
         // bean是单例模式,不需要使用并发map
         generators = new HashMap<>();
         generators.put(IOperationMapper.OPERATION_SELECT, new SelectGenerator());
+        generators.put(IOperationMapper.OPERATION_DELETE, new DeleteGenerator());
     }
 
     @Override
