@@ -21,6 +21,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String FROM = " FROM ";
     protected static final String INTO = " INTO ";
     protected static final String VALUES = " VALUES ";
+    protected static final String SET = " SET ";
 
     // sql中的各种符号,前后都不带空格
     protected static final String COMMA = ",";

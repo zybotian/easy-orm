@@ -24,6 +24,7 @@ public class MySqlDialect implements IDialect {
         generators.put(IOperationMapper.OPERATION_SELECT, new SelectGenerator());
         generators.put(IOperationMapper.OPERATION_DELETE, new DeleteGenerator());
         generators.put(IOperationMapper.OPERATION_INSERT, new InsertGenerator());
+        generators.put(IOperationMapper.OPERATION_UPDATE, new UpdateGenerator());
     }
 
     @Override
