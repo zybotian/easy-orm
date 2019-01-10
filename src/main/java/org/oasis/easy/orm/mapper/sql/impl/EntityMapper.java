@@ -1,5 +1,7 @@
 package org.oasis.easy.orm.mapper.sql.impl;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +14,7 @@ import org.oasis.easy.orm.mapper.sql.IEntityMapper;
 import org.oasis.easy.orm.utils.FormatUtils;
 
 import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author tianbo
@@ -26,6 +27,9 @@ public class EntityMapper implements IEntityMapper {
     private List<IColumnMapper> primaryKeyColumnMappers;
 
     private String tableName;
+
+    // 构造column mapper的同时填充map
+    private Map<String, IColumnMapper> filedColumnMapperMap = Maps.newHashMap();
 
     public EntityMapper(Class<?> clazz) {
         columnMappers = generateColumnMappers(clazz);
@@ -63,6 +67,7 @@ public class EntityMapper implements IEntityMapper {
                  */
                 ColumnMapper columnMapper = new ColumnMapper(field);
                 columnMappers.add(columnMapper);
+                filedColumnMapperMap.put(field.getName(), columnMapper);
             }
         }
         return columnMappers;
@@ -86,5 +91,10 @@ public class EntityMapper implements IEntityMapper {
     @Override
     public List<IColumnMapper> getPrimaryKeyColumnMappers() {
         return primaryKeyColumnMappers;
+    }
+
+    @Override
+    public IColumnMapper getColumnMapperByFieldName(String fieldName) {
+        return filedColumnMapperMap.get(fieldName);
     }
 }

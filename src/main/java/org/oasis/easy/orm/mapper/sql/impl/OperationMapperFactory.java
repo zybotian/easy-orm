@@ -16,8 +16,6 @@ public class OperationMapperFactory {
     }
 
     public IOperationMapper create(StatementMetadata statementMetadata) {
-        IOperationMapper operationMapper = new ConditionOperationMapper(statementMetadata);
-        operationMapper.setEntityMapperFactory(entityMapperFactory);
-        return operationMapper;
+        return new ConditionOperationMapper(statementMetadata, this.entityMapperFactory);
     }
 }

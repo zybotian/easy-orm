@@ -1,6 +1,6 @@
 package org.oasis.easy.orm.mapper.sql;
 
-import org.oasis.easy.orm.mapper.sql.impl.EntityMapperFactory;
+import java.util.List;
 
 /**
  * @author tianbo
@@ -35,7 +35,13 @@ public interface IOperationMapper {
 
     IEntityMapper getEntityMapper();
 
-    void setEntityMapperFactory(EntityMapperFactory entityMapperFactory);
+    List<IParameterMapper> getParameterMappers();
 
     boolean isPrimaryKeyMode();
+
+    boolean isComplexMode();
+
+    boolean isEntityMode();
+
+    boolean isEntityCollectionMode();
 }

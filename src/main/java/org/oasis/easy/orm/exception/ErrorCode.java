@@ -19,6 +19,7 @@ public enum ErrorCode {
     EMPTY_DATA_SET_ERROR(101009, "empty data set error", "空的数据集"),
     INCORRECT_DATA_SIZE_ERROR(101010, "incorrect data size error", "数据集的size不正确"),
     INCORRECT_DATA_TYPE_ERROR(101011, "incorrect data type error", "数据类型不正确"),
+    MAPPING_ERROR(101012, "mapping error", "映射错误"),
 
 
     // 其他

@@ -21,4 +21,9 @@ public interface IEntityMapper {
      * 主键对应的列
      */
     List<IColumnMapper> getPrimaryKeyColumnMappers();
+
+    /**
+     * 获取字段名对应的column mapper
+     */
+    IColumnMapper getColumnMapperByFieldName(String fieldName);
 }

@@ -1,6 +1,5 @@
 package org.oasis.easy.orm.dialect.mysql;
 
-import org.apache.commons.lang3.StringUtils;
 import org.oasis.easy.orm.mapper.sql.impl.ConditionOperationMapper;
 import org.oasis.easy.orm.statement.StatementRuntime;
 

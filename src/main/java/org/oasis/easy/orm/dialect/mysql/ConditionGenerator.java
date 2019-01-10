@@ -1,13 +1,19 @@
 package org.oasis.easy.orm.dialect.mysql;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.oasis.easy.orm.constant.Operator;
 import org.oasis.easy.orm.dialect.ISqlGenerator;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
 import org.oasis.easy.orm.mapper.sql.IColumnMapper;
+import org.oasis.easy.orm.mapper.sql.IParameterMapper;
 import org.oasis.easy.orm.mapper.sql.impl.ConditionOperationMapper;
 import org.oasis.easy.orm.statement.StatementRuntime;
+import org.oasis.easy.orm.utils.OperatorUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author tianbo
@@ -22,6 +28,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String INTO = " INTO ";
     protected static final String VALUES = " VALUES ";
     protected static final String SET = " SET ";
+    protected static final String LIMIT = " LIMIT ";
 
     // sql中的各种符号,前后都不带空格
     protected static final String COMMA = ",";
@@ -29,7 +36,10 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String COLON = ":";
     protected static final String BRACKETS_LEFT = "(";
     protected static final String BRACKETS_RIGHT = ")";
+    protected static final String IS_NULL = " IS NULL ";
+    protected static final String IS_NOT_NULL = " IS NOT NULL ";
 
+    private static final Map<Operator, String> OPERATORS = OperatorUtils.getOperatorValueMap();
 
     @Override
     public String generate(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime) {
@@ -37,7 +47,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         applyCondition(operationMapper, statementRuntime, generatedSql);
         afterApplyCondition(operationMapper, statementRuntime, generatedSql);
-//        System.out.println("generated sql[" + generatedSql + "]");
+        System.out.println("generated sql[" + generatedSql + "]");
         return generatedSql.toString();
     }
 
@@ -47,6 +57,8 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected void applyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
         if (operationMapper.isPrimaryKeyMode()) {
             applyConditionByPrimaryKeyMode(operationMapper, statementRuntime, generatedSql);
+        } else if (operationMapper.isComplexMode()) {
+            applyConditionByComplexMode(operationMapper, statementRuntime, generatedSql);
         } else {
             throw new EasyOrmException(ErrorCode.UNSUPPORTED_OPERATION_ERROR, "unsupported operation mapper mode");
         }
@@ -66,6 +78,76 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
             generatedSql.append(COLON);
             generatedSql.append(i + 1);
         }
+    }
+
+    private void applyConditionByComplexMode(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
+        List<IParameterMapper> parameterMappers = operationMapper.getParameterMappers();
+        if (CollectionUtils.isEmpty(parameterMappers)) {
+            return;
+        }
+
+        int index = operationMapper.getWhereAt();
+        if (index < 0) {
+            // 如果没有标记@Where注解,则默认所有的参数都属于where条件
+            index = 0;
+        }
+
+        boolean appendedWhere = false;
+        String and = "";
+        int parameterSize = parameterMappers.size();
+        for (; index < parameterSize; index++) {
+            String condition = generateCondition(operationMapper, statementRuntime, parameterMappers.get(index), index);
+            if (StringUtils.isNotEmpty(condition)) {
+                if (!appendedWhere) {
+                    generatedSql.append(WHERE);
+                    appendedWhere = true;
+                }
+
+                generatedSql.append(and);
+                generatedSql.append(condition);
+                and = AND;
+            }
+        }
+    }
+
+    private String generateCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime,
+                                     IParameterMapper parameterMapper, int index) {
+        Operator operator = parameterMapper.getOperator();
+        if (!OPERATORS.containsKey(operator)) {
+            return null;
+        }
+
+        Object value = statementRuntime.getParameters().get(":" + (index + 1));
+        if (value == null && operator == Operator.IN) {
+            // 忽略IN NULL
+            return null;
+        }
+
+        StringBuilder sql = new StringBuilder();
+        String fieldName = parameterMapper.getColumnMapper().getFieldName();
+        IColumnMapper columnMapper = operationMapper.getEntityMapper().getColumnMapperByFieldName(fieldName);
+        sql.append(columnMapper.getName());
+
+        if (value == null) {
+            if (operator == Operator.EQ) {
+                sql.append(IS_NULL);
+            } else if (operator == Operator.NE) {
+                sql.append(IS_NOT_NULL);
+            }
+            return sql.toString();
+        }
+
+        sql.append(OPERATORS.get(operator));
+
+        if (operator == Operator.IN) {
+            sql.append(BRACKETS_LEFT);
+        }
+        sql.append(":");
+        sql.append(index + 1);
+        if (operator == Operator.IN) {
+            sql.append(BRACKETS_RIGHT);
+        }
+        return sql.toString();
     }
 
     protected void afterApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
