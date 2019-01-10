@@ -41,4 +41,31 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                         @SqlParam("salary") @Le Double maxSalary,
                         @Offset Integer limit,
                         @Limit Integer offset);
+
+    //---------------------------------------------------------
+    int updateAddress(@SqlParam("address") String address,
+                      @Where
+                      @SqlParam("id") Long id);
+
+    int updateName(@SqlParam("name") String name,
+                   @Where
+                   @SqlParam("id") Long id);
+
+    int updateGroupId(@SqlParam("groupId") Integer groupId,
+                      @Where
+                      @SqlParam("id") Long id);
+
+    int updateNameAddress(@SqlParam("name") String name,
+                          @SqlParam("address") String address,
+                          @Where
+                          @SqlParam("id") Long id);
+
+    int updateByGroupId(@SqlParam("address") String address,
+                        @Where
+                        @SqlParam("groupId") Integer groupId);
+
+    int updateNameAddressByGroup(@SqlParam("name") String name,
+                                 @SqlParam("address") String address,
+                                 @Where
+                                 @SqlParam("groupId") @In List<Integer> groupIds);
 }
