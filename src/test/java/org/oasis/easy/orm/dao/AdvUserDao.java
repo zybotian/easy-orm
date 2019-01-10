@@ -42,6 +42,8 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                         @Offset Integer limit,
                         @Limit Integer offset);
 
+    List<User> findByMarried(@SqlParam("married") Boolean married);
+
     //---------------------------------------------------------
     int updateAddress(@SqlParam("address") String address,
                       @Where
@@ -68,4 +70,32 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                                      @SqlParam("address") String address,
                                      @Where
                                      @SqlParam("groupId") @In List<Integer> groupIds);
+
+    int updateNameByAgeRangeAddress(@SqlParam("name") String name,
+                                    @SqlParam("updateTime") Long updateTime,
+                                    @Where
+                                    @SqlParam("age") @Ge Integer minAge,
+                                    @SqlParam("age") @Le Integer maxAge,
+                                    @SqlParam("address") @Like String address);
+
+    //---------------------------------------------------------
+
+    int deleteById(@SqlParam("id") Long id);
+
+    int deleteByGroupId(@SqlParam("groupId") Integer groupId);
+
+    int deleteByName(@SqlParam("name") String name);
+
+    int deleteByMarried(@SqlParam("married") Boolean married);
+
+    int deleteByNameLike(@SqlParam("name") @Like String name);
+
+    int deleteByIdList(@SqlParam("id") @In List<Long> idList);
+
+    int deleteByGroupIdList(@SqlParam("groupId") @In List<Integer> groupIdList);
+
+    int delete(@SqlParam("name") @Like String name,
+               @SqlParam("groupId") @In List<Integer> groupIds,
+               @SqlParam("age") @Ge Integer minAge,
+               @SqlParam("age") @Lt Integer maxAge);
 }

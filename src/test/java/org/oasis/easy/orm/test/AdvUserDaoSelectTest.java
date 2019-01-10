@@ -185,4 +185,19 @@ public class AdvUserDaoSelectTest extends AbstractTestCase {
                 10);
         Assert.assertTrue(list9.size() == 2);
     }
+
+    @Test
+    public void testFindByMarried() throws Exception {
+        List<User> users = advUserDao.findByMarried(true);
+        sort(users);
+        Assert.assertTrue(users.size() == 2);
+        Assert.assertTrue(users.get(0).getId() == 2);
+        Assert.assertTrue(users.get(1).getId() == 4);
+
+        List<User> users1 = advUserDao.findByMarried(false);
+        sort(users1);
+        Assert.assertTrue(users1.size() == 2);
+        Assert.assertTrue(users1.get(0).getId() == 1);
+        Assert.assertTrue(users1.get(1).getId() == 3);
+    }
 }

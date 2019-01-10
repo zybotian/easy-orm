@@ -135,12 +135,26 @@ public class AdvUserDaoUpdateTest extends AbstractTestCase {
         }
     }
 
-    private void sort(List<User> users) {
-        Collections.sort(users, new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                return (int) (o1.getId() - o2.getId());
-            }
-        });
+    @Test
+    public void testUpdateNameByAgeRangeAddress() throws Exception {
+        List<User> list = advUserDao.findList(0, 10);
+        Assert.assertEquals("hubei", list.get(0).getAddress());
+        Assert.assertEquals("hunan", list.get(1).getAddress());
+        Assert.assertEquals("shanghai", list.get(2).getAddress());
+        Assert.assertEquals("jiangsu", list.get(3).getAddress());
+        Assert.assertTrue(18 == list.get(0).getAge());
+        Assert.assertTrue(19 == list.get(1).getAge());
+        Assert.assertTrue(20 == list.get(2).getAge());
+        Assert.assertTrue(21 == list.get(3).getAge());
+
+        long timestamp = System.currentTimeMillis();
+        // 预期是将id=3的记录修改掉
+        int updated = advUserDao.updateNameByAgeRangeAddress("舟山群岛", timestamp, 18, 20, "%ang%");
+        Assert.assertTrue(updated > 0);
+        List<User> list1 = advUserDao.findList(0, 10);
+        Assert.assertEquals("test-name", list1.get(0).getName());
+        Assert.assertEquals("test-name", list1.get(1).getName());
+        Assert.assertEquals("舟山群岛", list1.get(2).getName());
+        Assert.assertEquals("test-name", list1.get(3).getName());
     }
 }

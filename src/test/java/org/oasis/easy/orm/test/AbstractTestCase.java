@@ -8,7 +8,7 @@ import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author tianbo
@@ -70,5 +70,14 @@ public abstract class AbstractTestCase extends TestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         createTableDao.dropUserTable();
+    }
+
+    protected void sort(List<User> users) {
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                return (int) (o1.getId() - o2.getId());
+            }
+        });
     }
 }
