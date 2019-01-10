@@ -39,7 +39,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String IS_NULL = " IS NULL ";
     protected static final String IS_NOT_NULL = " IS NOT NULL ";
 
-    private static final Map<Operator, String> OPERATORS = OperatorUtils.getOperatorValueMap();
+    protected static final Map<Operator, String> OPERATORS = OperatorUtils.getOperatorValueMap();
 
     @Override
     public String generate(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime) {
@@ -58,7 +58,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         if (operationMapper.isPrimaryKeyMode()) {
             applyConditionByPrimaryKeyMode(operationMapper, statementRuntime, generatedSql);
         } else if (operationMapper.isComplexMode()) {
-            applyConditionByComplexMode(operationMapper, statementRuntime, generatedSql);
+            applyConditionByPrimaryKeyOrComplexMode(operationMapper, statementRuntime, generatedSql);
         } else {
             throw new EasyOrmException(ErrorCode.UNSUPPORTED_OPERATION_ERROR, "unsupported operation mapper mode");
         }
@@ -80,7 +80,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         }
     }
 
-    private void applyConditionByComplexMode(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
+    private void applyConditionByPrimaryKeyOrComplexMode(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
         List<IParameterMapper> parameterMappers = operationMapper.getParameterMappers();
         if (CollectionUtils.isEmpty(parameterMappers)) {
             return;

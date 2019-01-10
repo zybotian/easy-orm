@@ -11,7 +11,6 @@ public class DeleteGenerator extends ConditionGenerator {
 
     @Override
     protected void beforeApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
-        super.beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         generatedSql.append(operationMapper.getOperationName());
         generatedSql.append(FROM);
         generatedSql.append(operationMapper.getEntityMapper().getTableName());

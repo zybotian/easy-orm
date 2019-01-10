@@ -64,8 +64,8 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                         @Where
                         @SqlParam("groupId") Integer groupId);
 
-    int updateNameAddressByGroup(@SqlParam("name") String name,
-                                 @SqlParam("address") String address,
-                                 @Where
-                                 @SqlParam("groupId") @In List<Integer> groupIds);
+    int updateNameAddressByGroupList(@SqlParam("name") String name,
+                                     @SqlParam("address") String address,
+                                     @Where
+                                     @SqlParam("groupId") @In List<Integer> groupIds);
 }

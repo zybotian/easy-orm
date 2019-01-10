@@ -18,7 +18,6 @@ public class SelectGenerator extends ConditionGenerator {
 
     @Override
     protected void beforeApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
-        super.beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         IEntityMapper entityMapper = operationMapper.getEntityMapper();
 
         List<IColumnMapper> columnMappers = entityMapper.getColumnMappers();
@@ -40,7 +39,6 @@ public class SelectGenerator extends ConditionGenerator {
 
     @Override
     protected void afterApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
-        super.afterApplyCondition(operationMapper, statementRuntime, generatedSql);
         applyPagination(operationMapper, statementRuntime, generatedSql);
     }
 
