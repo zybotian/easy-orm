@@ -118,7 +118,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         }
 
         Object value = statementRuntime.getParameters().get(":" + (index + 1));
-        if (value == null && operator == Operator.IN) {
+        if (value == null) {
             // 忽略IN NULL
             return null;
         }
@@ -127,16 +127,6 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         String fieldName = parameterMapper.getColumnMapper().getFieldName();
         IColumnMapper columnMapper = operationMapper.getEntityMapper().getColumnMapperByFieldName(fieldName);
         sql.append(columnMapper.getName());
-
-        if (value == null) {
-            if (operator == Operator.EQ) {
-                sql.append(IS_NULL);
-            } else if (operator == Operator.NE) {
-                sql.append(IS_NOT_NULL);
-            }
-            return sql.toString();
-        }
-
         sql.append(OPERATORS.get(operator));
 
         if (operator == Operator.IN) {

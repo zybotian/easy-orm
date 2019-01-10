@@ -259,4 +259,43 @@ public class AdvUserDaoTest extends AbstractTestCase {
         Assert.assertTrue(users5.get(0).getAge() == 20);
         Assert.assertTrue(users5.get(1).getAge() == 21);
     }
+
+    @Test
+    public void testFindList2() throws Exception {
+        List<User> list = advUserDao.findList(null, null, null, null, null, null, null, 0,
+                10);
+        Assert.assertTrue(list.size() == 4);
+
+        List<User> list2 = advUserDao.findList(0, null, null, null, null, null, null, 0,
+                10);
+        Assert.assertTrue(list2.size() == 4);
+
+        List<User> list3 = advUserDao.findList(0, 30, null, null, null, null, null, 0,
+                10);
+        Assert.assertTrue(list3.size() == 4);
+
+        List<User> list4 = advUserDao.findList(0, 30, "%test%", null, null, null, null, 0,
+                10);
+        Assert.assertTrue(list4.size() == 4);
+
+        List<User> list5 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), null, null, 0,
+                10);
+        Assert.assertTrue(list5.size() == 4);
+
+        List<User> list6 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), 0.0, 1000.0, 0,
+                10);
+        Assert.assertTrue(list6.size() == 4);
+
+        List<User> list7 = advUserDao.findList(0, 30, "%test%", "%h%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+                10);
+        Assert.assertTrue(list7.size() == 3);
+
+        List<User> list8 = advUserDao.findList(0, 30, "%test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+                10);
+        Assert.assertTrue(list8.size() == 2);
+
+        List<User> list9 = advUserDao.findList(0, 30, "test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+                10);
+        Assert.assertTrue(list9.size() == 2);
+    }
 }

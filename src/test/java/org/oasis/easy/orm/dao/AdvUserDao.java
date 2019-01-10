@@ -32,4 +32,13 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                               @Offset Integer limit,
                               @Limit Integer offset);
 
+    List<User> findList(@SqlParam("age") @Gt Integer minAge,
+                        @SqlParam("age") @Lt Integer maxAge,
+                        @SqlParam("name") @Like String name,
+                        @SqlParam("address") @Like String address,
+                        @SqlParam("groupId") @In List<Integer> groupIds,
+                        @SqlParam("salary") @Ge Double minSalary,
+                        @SqlParam("salary") @Le Double maxSalary,
+                        @Offset Integer limit,
+                        @Limit Integer offset);
 }
