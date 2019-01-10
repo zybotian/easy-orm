@@ -1,15 +1,20 @@
 package org.oasis.easy.orm.mapper.sql.impl;
 
+import org.oasis.easy.orm.mapper.sql.AbstractCacheableMap;
 import org.oasis.easy.orm.mapper.sql.IEntityMapper;
 
 /**
  * @author tianbo
  * @date 2019-01-07
  */
-public class EntityMapperFactory {
+public class EntityMapperFactory extends AbstractCacheableMap<Class<?>, EntityMapper> {
+
+    @Override
+    protected EntityMapper newValueObject(Class<?> clazz) {
+        return new EntityMapper(clazz);
+    }
 
     public IEntityMapper create(Class<?> clazz) {
-        IEntityMapper entityMapper = new EntityMapper(clazz);
-        return entityMapper;
+        return getOrCreate(clazz);
     }
 }
