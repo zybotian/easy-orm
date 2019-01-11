@@ -6,7 +6,8 @@ import org.oasis.easy.orm.dao.AdvUserDao;
 import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author tianbo
@@ -156,5 +157,32 @@ public class AdvUserDaoUpdateTest extends AbstractTestCase {
         Assert.assertEquals("test-name", list1.get(1).getName());
         Assert.assertEquals("舟山群岛", list1.get(2).getName());
         Assert.assertEquals("test-name", list1.get(3).getName());
+    }
+
+    @Test
+    public void testUpdateBatch() throws Exception {
+        List<User> users = advUserDao.findList(0, 10);
+        for (User user : users) {
+            user.setGroupId(user.getGroupId() + 1);
+            user.setAge(user.getAge() + 1);
+            user.setAddress("address:" + user.getAddress());
+        }
+
+        boolean update = advUserDao.update(users);
+        Assert.assertTrue(update);
+
+        List<User> list = advUserDao.findList(0, 10);
+        Assert.assertTrue(list.get(0).getGroupId() == 101);
+        Assert.assertTrue(list.get(1).getGroupId() == 102);
+        Assert.assertTrue(list.get(2).getGroupId() == 101);
+        Assert.assertTrue(list.get(3).getGroupId() == 102);
+        Assert.assertTrue(list.get(0).getAge() == 19);
+        Assert.assertTrue(list.get(1).getAge() == 20);
+        Assert.assertTrue(list.get(2).getAge() == 21);
+        Assert.assertTrue(list.get(3).getAge() == 22);
+        Assert.assertEquals("address:hubei", list.get(0).getAddress());
+        Assert.assertEquals("address:hunan", list.get(1).getAddress());
+        Assert.assertEquals("address:shanghai", list.get(2).getAddress());
+        Assert.assertEquals("address:jiangsu", list.get(3).getAddress());
     }
 }

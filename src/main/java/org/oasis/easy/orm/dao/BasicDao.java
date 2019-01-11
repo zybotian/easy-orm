@@ -1,6 +1,6 @@
 package org.oasis.easy.orm.dao;
 
-import org.oasis.easy.orm.annotations.ReturnGeneratedKeys;
+import org.oasis.easy.orm.annotations.*;
 
 import java.util.List;
 
@@ -24,12 +24,19 @@ public interface BasicDao<ENTITY, ID> {
     /**
      * 批量插入
      */
+    @Batchable
     boolean insert(List<ENTITY> entities);
 
     /**
      * 更新一条记录
      */
     boolean update(ENTITY entity);
+
+    /**
+     * 批量修改记录
+     */
+    @Batchable
+    boolean update(List<ENTITY> entities);
 
     /**
      * 按照id删除

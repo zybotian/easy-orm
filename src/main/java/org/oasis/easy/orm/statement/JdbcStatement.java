@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.statement;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.oasis.easy.orm.annotations.Batchable;
 import org.oasis.easy.orm.annotations.ReturnGeneratedKeys;
 import org.oasis.easy.orm.constant.SqlType;
 import org.oasis.easy.orm.exception.EasyOrmException;
@@ -36,15 +37,20 @@ public class JdbcStatement implements Statement {
         this.querier = querier;
         if (sqlType == SqlType.WRITE) {
             Method method = metadata.getMethod();
-            Class<?>[] types = method.getParameterTypes();
+            if (method.isAnnotationPresent(Batchable.class)) {
+                // 方法上明确标记了@Batchable的,认为是批量写操作
+                this.batchUpdate = true;
+            } else {
+                this.batchUpdate = false;
+            }
+
             Class<?> returnType = metadata.getReturnType();
             if (returnType.isPrimitive()) {
                 returnType = ClassUtils.primitiveToWrapper(returnType);
             }
 
             ReturnGeneratedKeys returnGeneratedKeys = metadata.getMethod().getAnnotation(ReturnGeneratedKeys.class);
-            if (types.length > 0 && List.class.isAssignableFrom(types[0])) {
-                this.batchUpdate = true;
+            if (this.batchUpdate) {
                 if (returnGeneratedKeys != null) {
                     throw new EasyOrmException(ErrorCode.INCORRECT_DATA_TYPE_ERROR,
                             "batch update method cannot return generated keys: " + method);
@@ -55,7 +61,6 @@ public class JdbcStatement implements Statement {
                             "return type only support type of {void,boolean,int,int[]}: " + method);
                 }
             } else {
-                this.batchUpdate = false;
                 if (returnGeneratedKeys != null) {
                     if (!Number.class.isAssignableFrom(returnType)) {
                         throw new EasyOrmException(ErrorCode.INCORRECT_DATA_TYPE_ERROR,

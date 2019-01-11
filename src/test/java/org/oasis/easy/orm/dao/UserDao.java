@@ -1,7 +1,6 @@
 package org.oasis.easy.orm.dao;
 
-import org.oasis.easy.orm.annotations.Dao;
-import org.oasis.easy.orm.annotations.Sql;
+import org.oasis.easy.orm.annotations.*;
 import org.oasis.easy.orm.model.*;
 
 import java.util.*;
@@ -11,7 +10,7 @@ import java.util.*;
  * @date 2018-12-29
  */
 @Dao
-public interface UserDao {
+public interface UserDao extends BasicDao<User, Long> {
     String TABLE_NAME = "`user`";
     String INSERT_COLUMNS = "`name`,`age`,`group_id`,`address`,`married`,`salary`,`create_time`,`update_time`";
     String SELECT_COLUMNS = "`id`," + INSERT_COLUMNS;
@@ -72,6 +71,7 @@ public interface UserDao {
     @Sql("insert into " + TABLE_NAME + "(" + INSERT_COLUMNS + ")" + "values(" + INSERT_VALUES + ")")
     int insertOne(User user);
 
+    @Batchable
     @Sql("insert into " + TABLE_NAME + "(" + INSERT_COLUMNS + ")" + "values(" + INSERT_VALUES + ")")
     int insertList(List<User> user);
 
