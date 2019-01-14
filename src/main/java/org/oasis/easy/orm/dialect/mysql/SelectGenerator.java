@@ -2,6 +2,7 @@ package org.oasis.easy.orm.dialect.mysql;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.oasis.easy.orm.annotations.Count;
 import org.oasis.easy.orm.exception.EasyOrmException;
 import org.oasis.easy.orm.exception.ErrorCode;
 import org.oasis.easy.orm.mapper.sql.*;
@@ -25,11 +26,35 @@ public class SelectGenerator extends ConditionGenerator {
         generatedSql.append(operationMapper.getOperationName());
         generatedSql.append(StringUtils.SPACE);
 
-        for (IColumnMapper columnMapper : columnMappers) {
-            generatedSql.append(columnMapper.getName() + COMMA);
+        if (operationMapper.isCountMode()) {
+            Count count = operationMapper.getCount();
+            if (count == null) {
+                throw new EasyOrmException(ErrorCode.INVALID_PARAM, "invalid count field");
+            }
+
+            if (null == entityMapper.getColumnMapperByFieldName(count.value())) {
+                throw new EasyOrmException(ErrorCode.INVALID_PARAM, "invalid count field");
+            }
+
+            generatedSql.append(COUNT);
+            generatedSql.append(BRACKETS_LEFT);
+            if (count.distinct()) {
+                generatedSql.append(DISTINCT);
+                generatedSql.append(BRACKETS_LEFT);
+            }
+
+            generatedSql.append(entityMapper.getColumnMapperByFieldName(count.value()).getName());
+            if (count.distinct()) {
+                generatedSql.append(BRACKETS_RIGHT);
+            }
+            generatedSql.append(BRACKETS_RIGHT);
+        } else {
+            for (IColumnMapper columnMapper : columnMappers) {
+                generatedSql.append(columnMapper.getName() + COMMA);
+            }
+            generatedSql.setLength(generatedSql.length() - 1);
         }
 
-        generatedSql.setLength(generatedSql.length() - 1);
         generatedSql.append(FROM + entityMapper.getTableName());
     }
 

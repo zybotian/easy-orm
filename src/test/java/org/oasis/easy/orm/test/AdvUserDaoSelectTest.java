@@ -240,4 +240,11 @@ public class AdvUserDaoSelectTest extends AbstractTestCase {
         User user1 = advUserDao.selectForUpdate(5L);
         Assert.assertTrue(user1 == null);
     }
+
+    @Test
+    public void testCount() throws Exception {
+        Assert.assertTrue(advUserDao.countDistinctId() == 4);
+        Assert.assertTrue(advUserDao.countDistinctGroupId() == 2);
+        Assert.assertTrue(advUserDao.countGroupId() == 4);
+    }
 }

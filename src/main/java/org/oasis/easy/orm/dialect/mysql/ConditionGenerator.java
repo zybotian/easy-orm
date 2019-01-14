@@ -31,6 +31,9 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String LIMIT = " LIMIT ";
     protected static final String IGNORE = " IGNORE ";
     protected static final String ORDER_BY = " ORDER BY ";
+    protected static final String COUNT = "COUNT";
+    protected static final String DISTINCT = "DISTINCT";
+
 
     // sql中的各种符号,前后都不带空格
     protected static final String COMMA = ",";

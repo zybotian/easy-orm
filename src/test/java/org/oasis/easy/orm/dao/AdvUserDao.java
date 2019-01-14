@@ -46,6 +46,18 @@ public interface AdvUserDao extends BasicDao<User, Long> {
 
     List<User> findByMarried(@SqlParam("married") Boolean married);
 
+    /**
+     * count(distinct(id))
+     */
+    @Count
+    int countDistinctId();
+
+    @Count(value = "groupId")
+    int countDistinctGroupId();
+
+    @Count(value = "groupId", distinct = false)
+    int countGroupId();
+
     //---------------------------------------------------------
     int updateAddress(@SqlParam("address") String address,
                       @Where

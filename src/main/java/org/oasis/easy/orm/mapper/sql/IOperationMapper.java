@@ -1,5 +1,7 @@
 package org.oasis.easy.orm.mapper.sql;
 
+import org.oasis.easy.orm.annotations.Count;
+
 import java.util.List;
 
 /**
@@ -48,4 +50,8 @@ public interface IOperationMapper {
     boolean isLockMode();
 
     boolean isInsertIgnoreMode();
+
+    boolean isCountMode();
+
+    Count getCount();
 }

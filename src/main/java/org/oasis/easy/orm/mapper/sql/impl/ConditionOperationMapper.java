@@ -28,6 +28,7 @@ public class ConditionOperationMapper implements IOperationMapper {
     private static final long MODE_ENTITY_COLLECTION = 1 << 3;
     private static final long MODE_LOCK = 1 << 4;
     private static final long MODE_INSERT_IGNORE = 1 << 5;
+    private static final long MODE_COUNT = 1 << 6;
 
     private static final String ENTITY = "ENTITY";
     private static final String ID = "ID";
@@ -62,6 +63,8 @@ public class ConditionOperationMapper implements IOperationMapper {
 
     private List<IParameterMapper> parameterMappers;
 
+    private Count count;
+
     public ConditionOperationMapper(StatementMetadata statementMetadata, EntityMapperFactory entityMapperFactory) {
         this.statementMetadata = statementMetadata;
         this.entityMapperFactory = entityMapperFactory;
@@ -70,15 +73,22 @@ public class ConditionOperationMapper implements IOperationMapper {
         this.operationName = generateOperationName();
         // 注意:构造parameter map需要用到operation name,二者顺序切勿颠倒
         this.parameterMappers = generateParameterMappers(statementMetadata.getMethod());
-        this.checkMode(statementMetadata.getMethod());
+        this.count = statementMetadata.getMethod().getAnnotation(Count.class);
+        this.appendModes(statementMetadata.getMethod());
     }
 
-    private void checkMode(Method method) {
-        if (method.isAnnotationPresent(Lock.class)) {
-            appendMode(MODE_LOCK);
-        }
-        if (StringUtils.equals(operationName, OPERATION_INSERT) && method.isAnnotationPresent(InsertIgnore.class)) {
-            appendMode(MODE_INSERT_IGNORE);
+    private void appendModes(Method method) {
+        if (StringUtils.equals(operationName, OPERATION_INSERT)) {
+            if (method.isAnnotationPresent(InsertIgnore.class)) {
+                appendMode(MODE_INSERT_IGNORE);
+            }
+        } else if (StringUtils.equals(operationName, OPERATION_SELECT)) {
+            if (method.isAnnotationPresent(Lock.class)) {
+                appendMode(MODE_LOCK);
+            } else if (method.isAnnotationPresent(Count.class)) {
+                appendMode(MODE_COUNT);
+                appendMode(MODE_COMPLEX);
+            }
         }
     }
 
@@ -261,6 +271,11 @@ public class ConditionOperationMapper implements IOperationMapper {
         return isSpecifiedMode(MODE_INSERT_IGNORE);
     }
 
+    @Override
+    public boolean isCountMode() {
+        return isSpecifiedMode(MODE_COUNT);
+    }
+
     private void appendMode(long mode) {
         this.mode |= mode;
     }
@@ -283,5 +298,10 @@ public class ConditionOperationMapper implements IOperationMapper {
 
     public int getOrderByAt() {
         return orderByAt;
+    }
+
+    @Override
+    public Count getCount() {
+        return count;
     }
 }
