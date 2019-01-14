@@ -1,7 +1,7 @@
 package org.oasis.easy.orm.test;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
 import org.oasis.easy.orm.dao.CreateTableDao;
 import org.oasis.easy.orm.dao.UserDao;
 import org.oasis.easy.orm.model.User;
@@ -14,7 +14,7 @@ import java.util.*;
  * @author tianbo
  * @date 2018-01-04
  */
-public abstract class AbstractTestCase extends TestCase {
+public abstract class AbstractTestCase {
 
     private static final String CONFIG_LOCATION = "applicationContext-test.xml";
 
@@ -41,9 +41,8 @@ public abstract class AbstractTestCase extends TestCase {
         return user;
     }
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         if (springContext == null) {
             // spring bean容器初始化
             springContext = new ClassPathXmlApplicationContext(CONFIG_LOCATION);
@@ -66,9 +65,8 @@ public abstract class AbstractTestCase extends TestCase {
                 ));
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
-        super.tearDown();
         createTableDao.dropUserTable();
     }
 

@@ -15,6 +15,9 @@ public class InsertGenerator extends ConditionGenerator {
     @Override
     protected void beforeApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
         generatedSql.append(operationMapper.getOperationName());
+        if (operationMapper.isInsertIgnoreMode()) {
+            generatedSql.append(IGNORE);
+        }
         generatedSql.append(INTO);
         generatedSql.append(operationMapper.getEntityMapper().getTableName());
         generatedSql.append(BRACKETS_LEFT);

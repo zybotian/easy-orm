@@ -1,12 +1,11 @@
 package org.oasis.easy.orm.test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import org.oasis.easy.orm.dao.AdvUserDao;
 import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * @author tianbo
@@ -82,6 +81,18 @@ public class AdvUserDaoInsertTest extends AbstractTestCase {
         Assert.assertEquals("吐蕃", user8.getAddress());
         Assert.assertTrue(33 == user8.getAge());
 
+    }
+
+    // h2数据库不支持insert ignore操作,这里使用mysql测试之后将case标记为了Ignore
+    @Test
+    @Ignore
+    public void testInsertIgnore() throws Exception {
+        Long inserted = advUserDao.insertIgnore(newUser().setAge(256));
+        Assert.assertTrue(inserted == 5L);
+        Assert.assertTrue(advUserDao.find(5L).getAge() == 256);
+
+        Long insertedId = advUserDao.insertIgnore(advUserDao.find(5L));
+        Assert.assertTrue(insertedId == null);
     }
 
     private User newUser() {

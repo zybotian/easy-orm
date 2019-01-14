@@ -53,7 +53,7 @@ public class UserDaoUpdateTest extends AbstractTestCase {
                 .setCreateTime(123456L)
                 .setUpdateTime(123456L);
         int updated = userDao.upsertOne(one);
-        assertEquals(1, updated);
+        Assert.assertEquals(1, updated);
 
         User user = userDao.findByPrimaryKey(5L);
         Assert.assertEquals(5, user.getId().longValue());

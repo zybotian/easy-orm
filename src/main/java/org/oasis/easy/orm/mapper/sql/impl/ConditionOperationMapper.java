@@ -27,6 +27,7 @@ public class ConditionOperationMapper implements IOperationMapper {
     private static final long MODE_ENTITY = 1 << 2;
     private static final long MODE_ENTITY_COLLECTION = 1 << 3;
     private static final long MODE_LOCK = 1 << 4;
+    private static final long MODE_INSERT_IGNORE = 1 << 5;
 
     private static final String ENTITY = "ENTITY";
     private static final String ID = "ID";
@@ -67,6 +68,16 @@ public class ConditionOperationMapper implements IOperationMapper {
         this.operationName = generateOperationName();
         // 注意:构造parameter map需要用到operation name,二者顺序切勿颠倒
         this.parameterMappers = generateParameterMappers(statementMetadata.getMethod());
+        this.checkMode(statementMetadata.getMethod());
+    }
+
+    private void checkMode(Method method) {
+        if (method.isAnnotationPresent(Lock.class)) {
+            appendMode(MODE_LOCK);
+        }
+        if (StringUtils.equals(operationName, OPERATION_INSERT) && method.isAnnotationPresent(InsertIgnore.class)) {
+            appendMode(MODE_INSERT_IGNORE);
+        }
     }
 
     private String generateOperationName() {
@@ -146,10 +157,6 @@ public class ConditionOperationMapper implements IOperationMapper {
                 whereAt = index;
             }
             appendMode(MODE_COMPLEX);
-        }
-
-        if (method.isAnnotationPresent(Lock.class)) {
-            appendMode(MODE_LOCK);
         }
 
         SqlParam sqlParam = null;
@@ -240,6 +247,11 @@ public class ConditionOperationMapper implements IOperationMapper {
     @Override
     public boolean isLockMode() {
         return isSpecifiedMode(MODE_LOCK);
+    }
+
+    @Override
+    public boolean isInsertIgnoreMode() {
+        return isSpecifiedMode(MODE_INSERT_IGNORE);
     }
 
     private void appendMode(long mode) {

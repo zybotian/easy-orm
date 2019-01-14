@@ -28,6 +28,13 @@ public interface BasicDao<ENTITY, ID> {
     ID insert(ENTITY entity);
 
     /**
+     * 插入一条记录,如果主键冲突则忽略
+     */
+    @InsertIgnore
+    @ReturnGeneratedKeys
+    ID insertIgnore(ENTITY entity);
+
+    /**
      * 批量插入
      */
     @Batchable
