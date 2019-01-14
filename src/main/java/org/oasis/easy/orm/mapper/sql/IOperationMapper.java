@@ -19,7 +19,7 @@ public interface IOperationMapper {
             OPERATION_UPDATE
     };
 
-    String[] OPERATION_PREFIX_SELECT = {"get", "find", "query", "count"};
+    String[] OPERATION_PREFIX_SELECT = {"get", "find", "query", "count", "select"};
     String[] OPERATION_PREFIX_INSERT = {"save", "insert"};
     String[] OPERATION_PREFIX_DELETE = {"delete", "remove"};
     String[] OPERATION_PREFIX_UPDATE = {"update", "modify"};
@@ -44,4 +44,7 @@ public interface IOperationMapper {
     boolean isEntityMode();
 
     boolean isEntityCollectionMode();
+
+    boolean isLockMode();
+
 }

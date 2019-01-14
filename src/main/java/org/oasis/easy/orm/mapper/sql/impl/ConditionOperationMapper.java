@@ -26,6 +26,7 @@ public class ConditionOperationMapper implements IOperationMapper {
     private static final long MODE_COMPLEX = 1 << 1;
     private static final long MODE_ENTITY = 1 << 2;
     private static final long MODE_ENTITY_COLLECTION = 1 << 3;
+    private static final long MODE_LOCK = 1 << 4;
 
     private static final String ENTITY = "ENTITY";
     private static final String ID = "ID";
@@ -147,6 +148,10 @@ public class ConditionOperationMapper implements IOperationMapper {
             appendMode(MODE_COMPLEX);
         }
 
+        if (method.isAnnotationPresent(Lock.class)) {
+            appendMode(MODE_LOCK);
+        }
+
         SqlParam sqlParam = null;
 
         if (ArrayUtils.isNotEmpty(annotations)) {
@@ -230,6 +235,11 @@ public class ConditionOperationMapper implements IOperationMapper {
     @Override
     public boolean isEntityCollectionMode() {
         return isSpecifiedMode(MODE_ENTITY_COLLECTION);
+    }
+
+    @Override
+    public boolean isLockMode() {
+        return isSpecifiedMode(MODE_LOCK);
     }
 
     private void appendMode(long mode) {

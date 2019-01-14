@@ -16,6 +16,12 @@ public interface BasicDao<ENTITY, ID> {
     ENTITY find(ID id);
 
     /**
+     * 悲观锁
+     */
+    @Lock
+    ENTITY selectForUpdate(ID id);
+
+    /**
      * 插入一条记录
      */
     @ReturnGeneratedKeys

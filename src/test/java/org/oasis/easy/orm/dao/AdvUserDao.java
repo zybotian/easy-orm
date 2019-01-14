@@ -57,6 +57,10 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                       @Where
                       @SqlParam("id") Long id);
 
+    int updateAge(@SqlParam("age") Integer age,
+                  @Where
+                  @SqlParam("id") Long id);
+
     int updateNameAddress(@SqlParam("name") String name,
                           @SqlParam("address") String address,
                           @Where

@@ -10,7 +10,7 @@ import org.oasis.easy.orm.constant.SqlType;
  */
 @Dao
 public interface CreateTableDao {
-    String createUserTable = "create table user "
+    String createUserTable = "create table if not exists user"
             + "(id bigint not null auto_increment primary key"
             + ",name varchar(32) not null "
             + ",age int not null"
@@ -22,7 +22,7 @@ public interface CreateTableDao {
             + ",update_time bigint not null"
             + ")";
 
-    String dropUserTable = "drop table user if exists";
+    String dropUserTable = "drop table if exists user";
 
     @Sql(value = createUserTable, type = SqlType.WRITE)
     void createUserTable();

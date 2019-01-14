@@ -40,6 +40,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String IS_NOT_NULL = " IS NOT NULL ";
 
     protected static final Map<Operator, String> OPERATORS = OperatorUtils.getOperatorValueMap();
+    protected static final String FOR_UPDATE = " FOR UPDATE";
 
     @Override
     public String generate(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime) {
@@ -47,7 +48,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         applyCondition(operationMapper, statementRuntime, generatedSql);
         afterApplyCondition(operationMapper, statementRuntime, generatedSql);
-        System.out.println("generated sql[" + generatedSql + "]");
+//        System.out.println("generated sql[" + generatedSql + "]");
         return generatedSql.toString();
     }
 
@@ -77,6 +78,9 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
             generatedSql.append(EQUALS);
             generatedSql.append(COLON);
             generatedSql.append(i + 1);
+        }
+        if (operationMapper.isLockMode()) {
+            generatedSql.append(FOR_UPDATE);
         }
     }
 

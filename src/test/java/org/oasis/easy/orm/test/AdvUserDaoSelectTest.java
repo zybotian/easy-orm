@@ -200,4 +200,15 @@ public class AdvUserDaoSelectTest extends AbstractTestCase {
         Assert.assertTrue(users1.get(0).getId() == 1);
         Assert.assertTrue(users1.get(1).getId() == 3);
     }
+
+    @Test
+    public void testSelectForUpdate() throws Exception {
+        User user = advUserDao.selectForUpdate(1L);
+        Assert.assertTrue(user.getAge() == 18);
+        int updated = advUserDao.updateAge(user.getAge() + 1, 1L);
+        Assert.assertTrue(updated > 0);
+        Assert.assertTrue(advUserDao.find(1L).getAge() == 19);
+        User user1 = advUserDao.selectForUpdate(5L);
+        Assert.assertTrue(user1 == null);
+    }
 }
