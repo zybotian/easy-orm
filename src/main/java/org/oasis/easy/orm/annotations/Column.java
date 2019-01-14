@@ -24,5 +24,6 @@ public @interface Column {
     /**
      * 排序类型
      */
+    @Deprecated
     SortType sortType() default SortType.NONE;
 }
