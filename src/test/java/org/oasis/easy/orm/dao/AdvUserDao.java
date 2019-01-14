@@ -1,6 +1,7 @@
 package org.oasis.easy.orm.dao;
 
 import org.oasis.easy.orm.annotations.*;
+import org.oasis.easy.orm.mapper.sql.Order;
 import org.oasis.easy.orm.model.User;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public interface AdvUserDao extends BasicDao<User, Long> {
                         @SqlParam("groupId") @In List<Integer> groupIds,
                         @SqlParam("salary") @Ge Double minSalary,
                         @SqlParam("salary") @Le Double maxSalary,
+                        @OrderBy Order order,
                         @Offset Integer limit,
                         @Limit Integer offset);
 

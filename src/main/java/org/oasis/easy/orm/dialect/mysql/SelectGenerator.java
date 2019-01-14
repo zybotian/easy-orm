@@ -2,8 +2,9 @@ package org.oasis.easy.orm.dialect.mysql;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.oasis.easy.orm.mapper.sql.IColumnMapper;
-import org.oasis.easy.orm.mapper.sql.IEntityMapper;
+import org.oasis.easy.orm.exception.EasyOrmException;
+import org.oasis.easy.orm.exception.ErrorCode;
+import org.oasis.easy.orm.mapper.sql.*;
 import org.oasis.easy.orm.mapper.sql.impl.ConditionOperationMapper;
 import org.oasis.easy.orm.statement.StatementRuntime;
 
@@ -39,7 +40,44 @@ public class SelectGenerator extends ConditionGenerator {
 
     @Override
     protected void afterApplyCondition(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
+        applyOrderBy(operationMapper, statementRuntime, generatedSql);
         applyPagination(operationMapper, statementRuntime, generatedSql);
+    }
+
+    private void applyOrderBy(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {
+        int orderByIndex = operationMapper.getOrderByAt();
+        if (orderByIndex < 0) {
+            // 没有@OrderBy标记
+            return;
+        }
+
+        Map<String, Object> parameters = statementRuntime.getParameters();
+        Order order = (Order) parameters.get(":" + (operationMapper.getOrderByAt() + 1));
+
+        if (order == null || CollectionUtils.isEmpty(order.getOrderFieldList())) {
+            // orderby参数为空对象或者空列表
+            return;
+        }
+
+        boolean appendedOrderBy = false;
+        // 构造Orders时已经检查了参数有效性
+        List<Order.OrderField> orderFieldList = order.getOrderFieldList();
+        IEntityMapper entityMapper = operationMapper.getEntityMapper();
+        for (Order.OrderField orderField : orderFieldList) {
+            IColumnMapper columnMapper = entityMapper.getColumnMapperByFieldName(orderField.getField());
+            if (columnMapper == null) {
+                throw new EasyOrmException(ErrorCode.INVALID_PARAM, "invalid order by field:" + orderField.getField());
+            }
+            if (!appendedOrderBy) {
+                generatedSql.append(ORDER_BY);
+                appendedOrderBy = true;
+            }
+            generatedSql.append(columnMapper.getName());
+            generatedSql.append(StringUtils.SPACE);
+            generatedSql.append(orderField.getDirection().getValue());
+            generatedSql.append(COMMA);
+        }
+        generatedSql.setLength(generatedSql.length() - 1);
     }
 
     private void applyPagination(ConditionOperationMapper operationMapper, StatementRuntime statementRuntime, StringBuilder generatedSql) {

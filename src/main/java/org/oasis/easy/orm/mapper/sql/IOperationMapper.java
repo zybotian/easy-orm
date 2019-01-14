@@ -48,5 +48,4 @@ public interface IOperationMapper {
     boolean isLockMode();
 
     boolean isInsertIgnoreMode();
-
 }

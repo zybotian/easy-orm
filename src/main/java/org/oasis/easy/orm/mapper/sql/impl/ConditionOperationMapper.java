@@ -56,6 +56,8 @@ public class ConditionOperationMapper implements IOperationMapper {
 
     private int limitAt = -1;
 
+    private int orderByAt = -1;
+
     private long mode = 0;
 
     private List<IParameterMapper> parameterMappers;
@@ -117,6 +119,11 @@ public class ConditionOperationMapper implements IOperationMapper {
     }
 
     private IParameterMapper createParameterMapper(Class<?> type, Annotation[] annotations, int index) {
+        if (Order.class.isAssignableFrom(type)) {
+            orderByAt = index;
+            return null;
+        }
+
         Method method = statementMetadata.getMethod();
         if (annotations.length == 0
                 && primaryKeyType.isAssignableFrom(type)
@@ -272,5 +279,9 @@ public class ConditionOperationMapper implements IOperationMapper {
 
     private boolean isSpecifiedMode(long mode) {
         return (this.mode & mode) == mode;
+    }
+
+    public int getOrderByAt() {
+        return orderByAt;
     }
 }

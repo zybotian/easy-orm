@@ -3,6 +3,7 @@ package org.oasis.easy.orm.test;
 import org.junit.Assert;
 import org.junit.Test;
 import org.oasis.easy.orm.dao.AdvUserDao;
+import org.oasis.easy.orm.mapper.sql.Order;
 import org.oasis.easy.orm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -149,41 +150,69 @@ public class AdvUserDaoSelectTest extends AbstractTestCase {
 
     @Test
     public void testFindList2() throws Exception {
-        List<User> list = advUserDao.findList(null, null, null, null, null, null, null, 0,
+        List<User> list = advUserDao.findList(null, null, null, null, null, null, null, null, 0,
                 10);
         Assert.assertTrue(list.size() == 4);
 
-        List<User> list2 = advUserDao.findList(0, null, null, null, null, null, null, 0,
+        List<User> list2 = advUserDao.findList(0, null, null, null, null, null, null, null, 0,
                 10);
         Assert.assertTrue(list2.size() == 4);
 
-        List<User> list3 = advUserDao.findList(0, 30, null, null, null, null, null, 0,
+        List<User> list3 = advUserDao.findList(0, 30, null, null, null, null, null, null, 0,
                 10);
         Assert.assertTrue(list3.size() == 4);
 
-        List<User> list4 = advUserDao.findList(0, 30, "%test%", null, null, null, null, 0,
+        List<User> list4 = advUserDao.findList(0, 30, "%test%", null, null, null, null, null, 0,
                 10);
         Assert.assertTrue(list4.size() == 4);
 
-        List<User> list5 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), null, null, 0,
+        List<User> list5 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), null, null, null, 0,
                 10);
         Assert.assertTrue(list5.size() == 4);
 
-        List<User> list6 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), 0.0, 1000.0, 0,
+        List<User> list6 = advUserDao.findList(0, 30, "%test%", null, Arrays.asList(100, 101), 0.0, 1000.0, null, 0,
                 10);
         Assert.assertTrue(list6.size() == 4);
 
-        List<User> list7 = advUserDao.findList(0, 30, "%test%", "%h%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+        List<User> list7 = advUserDao.findList(0, 30, "%test%", "%h%", Arrays.asList(100, 101), 0.0, 1000.0, null, 0,
                 10);
         Assert.assertTrue(list7.size() == 3);
 
-        List<User> list8 = advUserDao.findList(0, 30, "%test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+        List<User> list8 = advUserDao.findList(0, 30, "%test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, null, 0,
                 10);
         Assert.assertTrue(list8.size() == 2);
 
-        List<User> list9 = advUserDao.findList(0, 30, "test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, 0,
+        List<User> list9 = advUserDao.findList(0, 30, "test%", "hu%", Arrays.asList(100, 101), 0.0, 1000.0, null, 0,
                 10);
         Assert.assertTrue(list9.size() == 2);
+    }
+
+    @Test
+    public void testFindListOrderBy() throws Exception {
+        Order order = new Order();
+        List<User> list = advUserDao.findList(null, null, null, null, null, null, null, order, 0,
+                10);
+        Assert.assertTrue(list.size() == 4);
+
+        order.asc("id");
+        List<User> list1 = advUserDao.findList(null, null, null, null, null, null, null, order, 0,
+                10);
+        Assert.assertTrue(list1.size() == 4);
+        Assert.assertTrue(1 == list1.get(0).getId());
+        Assert.assertTrue(2 == list1.get(1).getId());
+        Assert.assertTrue(3 == list1.get(2).getId());
+        Assert.assertTrue(4 == list1.get(3).getId());
+
+        order.reset();
+        order.desc("groupId");
+        order.asc("id");
+        List<User> list2 = advUserDao.findList(null, null, null, null, null, null, null, order, 0,
+                10);
+        Assert.assertTrue(list2.size() == 4);
+        Assert.assertTrue(2 == list2.get(0).getId());
+        Assert.assertTrue(4 == list2.get(1).getId());
+        Assert.assertTrue(1 == list2.get(2).getId());
+        Assert.assertTrue(3 == list2.get(3).getId());
     }
 
     @Test

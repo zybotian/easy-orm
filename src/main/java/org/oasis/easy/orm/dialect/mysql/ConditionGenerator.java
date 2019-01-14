@@ -30,6 +30,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
     protected static final String SET = " SET ";
     protected static final String LIMIT = " LIMIT ";
     protected static final String IGNORE = " IGNORE ";
+    protected static final String ORDER_BY = " ORDER BY ";
 
     // sql中的各种符号,前后都不带空格
     protected static final String COMMA = ",";
@@ -49,7 +50,7 @@ public abstract class ConditionGenerator implements ISqlGenerator<ConditionOpera
         beforeApplyCondition(operationMapper, statementRuntime, generatedSql);
         applyCondition(operationMapper, statementRuntime, generatedSql);
         afterApplyCondition(operationMapper, statementRuntime, generatedSql);
-        System.out.println("generated sql[" + generatedSql + "]");
+//        System.out.println("generated sql[" + generatedSql + "]");
         return generatedSql.toString();
     }
 
