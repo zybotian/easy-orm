@@ -1,6 +1,9 @@
 # easy-orm
 
 ## 1. how to use
+
+The easy-orm uses github as maven repository, so we only need to add maven dependency like others.
+
 ### 1.1 pom.xml configuration
 ```xml
 <project>
@@ -26,6 +29,9 @@
     </dependencies>
 </project>
 ```
+
+Then we need to add **EasyOrmBeanFactoryPostProcessor** to applicationContext.xml, it will scan specified dao package to find dao candicates and auto register dao bean definitions into spring bean factory.
+
 ### 1.2 applicationContext.xml configuration:
 ```xml
 <beans>
@@ -39,7 +45,13 @@
     </bean>
 </beans>
 ```
+
+Don't forget to configure **SqlManagerInterpreter** to enable auto-generating sql ability.
+
 ## 2. benefits
+- we can use @Sql to specify sql statement just like mybatis (see 2.1)
+- we can use easy-orm supported annotations to tell framework to auto generate sql statement (see 2.2)
+
 ### 2.1 as convenient as mybatis
 ```java
 public interface UserDao {
@@ -129,6 +141,7 @@ public interface BasicDao<ENTITY, ID> {
 ```
 
 The ***BasicDao*** provided basic CRUD supports, we can extends ***BasicDao*** to extend our dao class, like this:
+
 ```java
 @Dao
 public interface UserDao extends BasicDao<User, Long> {
@@ -324,4 +337,4 @@ public interface UserDao extends BasicDao<User, Long> {
 }
 ```
 
-See [test examples](https://github.com/zybotian/easy-orm-test)for more details.
+See [test examples](https://github.com/zybotian/easy-orm-test) for more details.
