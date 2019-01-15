@@ -323,3 +323,5 @@ public interface UserDao extends BasicDao<User, Long> {
                @SqlParam("age") @Lt Integer maxAge);
 }
 ```
+
+See [test examples](https://github.com/zybotian/easy-orm-test)for more details.
