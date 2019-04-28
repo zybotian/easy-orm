@@ -50,19 +50,19 @@ public abstract class AbstractTestCase {
         springContext.getAutowireCapableBeanFactory().autowireBean(this);
 
         createTableDao.createUserTable();
-        userDao.insertOne(
-                createUser().setAge(18).setAddress("hubei").setGroupId(100).setMarried(false).setSalary(100.0));
-        userDao.insertOne(
-                createUser().setAge(19).setAddress("hunan").setGroupId(101).setMarried(true).setSalary(200.0));
+//        userDao.insertOne(
+//                createUser().setAge(18).setAddress("hubei").setGroupId(100).setMarried(false).setSalary(100.0));
+//        userDao.insertOne(
+//                createUser().setAge(19).setAddress("hunan").setGroupId(101).setMarried(true).setSalary(200.0));
 //        userDao.insertOne(
 //                createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0));
 //        userDao.insertOne(
 //                createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0));
-        userDao.insertList(
-                Arrays.asList(
-                        createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0),
-                        createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0)
-                ));
+//        userDao.insertList(
+//                Arrays.asList(
+//                        createUser().setAge(20).setAddress("shanghai").setGroupId(100).setMarried(false).setSalary(300.0),
+//                        createUser().setAge(21).setAddress("jiangsu").setGroupId(101).setMarried(true).setSalary(400.0)
+//                ));
     }
 
     @After

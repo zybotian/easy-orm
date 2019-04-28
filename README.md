@@ -1,5 +1,7 @@
 # easy-orm
 
+[implementation](https://github.com/zybotian/easy-orm/blob/master/implementation.md)
+
 ## 1. how to use
 
 The easy-orm uses github as maven repository, so we only need to add maven dependency like others.
