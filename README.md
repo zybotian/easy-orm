@@ -1,6 +1,8 @@
 # easy-orm
 
-[implementation](https://github.com/zybotian/easy-orm/blob/master/implementation.md)
+## 0. implementation
+
+[implementation overview](https://github.com/zybotian/easy-orm/blob/master/implementation.md)
 
 ## 1. how to use
 
