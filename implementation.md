@@ -27,9 +27,9 @@ public interface UserDAO {
 
 在表结构复杂的时候,手写XxxDao很繁杂且容易出错. 
 
-[尝试Druid SqlParser对建表语句进行语法分析,得到表名,列名,列类型等信息,程序自动拼出model类和DAO类](https://github.com/zybotian/common-basic-service)
+尝试之一:[Druid SqlParser对建表语句进行语法分析,得到表名,列名,列类型等信息,程序自动拼出model类和DAO类](https://github.com/zybotian/common-basic-service)
 
-[EasyOrm框架,通过反射的方式拿到表名,列名,类型,程序自动生成sql语句](https://github.com/zybotian/easy-orm)
+尝试之二:[EasyOrm框架,通过反射的方式拿到表名,列名,类型,程序自动生成sql语句](https://github.com/zybotian/easy-orm)
 
 - 比较
    - Rose框架要求通过@Sql(sql语句)注解指定要执行的sql语句,需要程序员手写sql
