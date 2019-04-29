@@ -24,6 +24,7 @@ public interface UserDAO {
 
 - 需要自己定义model类
 - 需要自己写XxxDao接口类
+- 由于自己写sql很可能出错，开发时需要花费大量精力去写dao方法的junit单元测试
 
 在表结构复杂的时候,手写XxxDao很繁杂且容易出错. 
 
@@ -43,7 +44,31 @@ public interface UserDAO {
    ```
    ID insert(ENTITY entity);
    ```
+   
+   - 当然，EasyOrm是对Rose的封装，也支持rose的@Sql注解直接手写Sql的使用方式
+   
+- 基于Spring、对用户自定义接口类做文章的通用套路
 
+![通用套路](https://github.com/zybotian/easy-orm/tree/master/imgs/eo_framework.png)
+
+- 使用上述通用套路的框架有：
+   - Rose(公司内部使用的框架)
+      - 扫有@DAO标记且以DAO结尾的class
+      - 注册到spring容器
+      - 注册时指定class为DAOFactoryBean
+      - DAOFactoryBean接口的方法getObject方法中创建JDK动态代理
+      - 程序调用接口方法实际是调用动态代理的invoke
+      - 将DAO的方法上@Sql指定的sql语句拿到，invoke方法中拿到参数，经过各种处理，最后得到要执行的sql语句以及sql中占位符的值
+
+   - DYCONF(公司内部使用的框架)
+      - 扫描带有@DYCONF标记且以DONF结尾的class
+      - 注册到spring容器
+      - 注册时指定class为ConfFactoryBean
+      - ConfFactoryBean接口的方法getObject方法中创建JDK动态代理
+      - 程序调用接口方法实际时调用动态代理的invoke
+      - 将CONF类上的@Rootkey以及方法上的@ConfName拿到，拼接成rootkey+name
+      - 用上述组合key去zookeeper中拿到对应的值，解析，并返回给应用程序
+      
 ### Easy Orm实现原理
 
 1. EasyOrmBeanFactoryPostProcessor implements BeanFactoryPostProcessor
