@@ -49,7 +49,7 @@ public interface UserDAO {
    
 - 基于Spring、对用户自定义接口类做文章的通用套路
 
-![通用套路](https://github.com/zybotian/easy-orm/tree/master/imgs/eo_framework.png)
+![通用套路](https://github.com/zybotian/easy-orm/blob/master/imgs/eo_framework.png)
 
 - 使用上述通用套路的框架有：
    - Rose(公司内部使用的框架)
