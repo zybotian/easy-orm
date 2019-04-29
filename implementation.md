@@ -132,7 +132,7 @@ public Object invoke(Object proxy, Method method, Object[] args) {
 - SystemInterpreter是Rose框架提供,在执行真正的jdbc操作之前执行
    - 先通过method.getAnnotation(Sql.class)拿到@Sql注解对象
    - 通过@Sql注解可以拿到用户指定的sql语句
-   - 使用apache的jexl表达式引擎对sql语句中的占位符替换成参数的实际值
+   - InvocationHandler中可以得到参数的实际值
 
 - EasyOrm框架添加了SqlManagerInterpreter
 ```java
@@ -185,6 +185,8 @@ public interface UserDao extends BasicDao<User, Long> {}
    - ENTITY的实际类型为org.oasis.easy.orm.model.User, ID的实际类型为java.lang.Long
    
 - 5.2 根据约定,知道这条语句应当是insert
+   - 约定get、find、query、count、select开头的为SELECT
+   - 约定......
    ```
    String[] OPERATION_PREFIX_SELECT = {"get", "find", "query", "count", "select"};
    String[] OPERATION_PREFIX_INSERT = {"save", "insert"};
@@ -216,5 +218,9 @@ public interface UserDao extends BasicDao<User, Long> {}
    @Override
    public Object invoke(Object proxy, Method method, Object[] args) {
       // 间接调用jdbc操作数据库
+      // 1. 有表名字，有列名字，可以拼出insert语句、
+      // 2. invoke方法带上了接口传递的参数，可以拿到实际参数的值
+      // 3. 根据反射及框架约定，可以构造出最终要执行的preparestatement及其参数
+      // 4. 剩下的就是jdbc preparestatement执行sql语句，得到结果，并解析，返回结果
    }
    ```
