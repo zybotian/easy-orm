@@ -30,7 +30,7 @@ public interface UserDAO {
 
 尝试之一:[Druid SqlParser对建表语句进行语法分析,得到表名,列名,列类型等信息,程序自动拼出model类和DAO类](https://github.com/zybotian/common-basic-service)
 
-尝试之二:[EasyOrm框架,通过反射的方式拿到表名,列名,类型,程序自动生成sql语句](https://github.com/zybotian/easy-orm)
+尝试之二:[EasyOrm框架,通过反射的方式拿到表名,列名,类型,程序自动生成sql语句,然后再配合使用Rose框架执行sql](https://github.com/zybotian/easy-orm)
 
 - 比较
    - Rose框架要求通过@Sql(sql语句)注解指定要执行的sql语句,需要程序员手写sql
@@ -78,7 +78,8 @@ public interface UserDAO {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         // 1. 查找指定目录下所有的带有自定义@Dao注解标记的.class
-        
+        // EasyOrmComponentProvider daoComponentProvider = new EasyOrmComponentProvider();
+        // return daoComponentProvider.findCandidateComponents(baseDir);
         //    1.1 spring的ResourcePatternResolver.getResources(baseDir)可以得到所有符合要求的.class对应的Resource对象数组
         //    1.2 遍历Resource数组, spring的MetadataReaderFactory.getMetadataReader(resource)得到MetadataReader
         //    1.3 new ScannedGenericBeanDefinition(metadataReader)得到ScannedGenericBeanDefinition对象
@@ -185,13 +186,16 @@ public interface UserDao extends BasicDao<User, Long> {}
    - ENTITY的实际类型为org.oasis.easy.orm.model.User, ID的实际类型为java.lang.Long
    
 - 5.2 根据约定,知道这条语句应当是insert
-   - 约定get、find、query、count、select开头的为SELECT
+   - 约定Dao接口中以get、find、query、count、select开头的方法为SELECT
    - 约定......
    ```
    String[] OPERATION_PREFIX_SELECT = {"get", "find", "query", "count", "select"};
    String[] OPERATION_PREFIX_INSERT = {"save", "insert"};
    String[] OPERATION_PREFIX_DELETE = {"delete", "remove"};
    String[] OPERATION_PREFIX_UPDATE = {"update", "modify"};
+   ```
+   ```text
+   可以考虑提供一个注解@OperationType(type=SELECT/INSERT/DELETE/UPDATE/AUTO_DETECT),让使用者自行指定类型,指定了就按指定的操作类型,否则就按照默认规则进行判定
    ```
 - 5.3 获取表的名字
    - 如果使用@Table注解指定了表名字, 则使用指定的表名字 Table table = clazz.getAnnotation(Table.class)
